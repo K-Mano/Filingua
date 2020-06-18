@@ -25,3 +25,7 @@ hs_err_pid*
 # Conflict Fix
 vcs.xml
 workspace.xml
+fileHashes.bin
+build_file_checksums.ser
+app.iml
+local.properties
