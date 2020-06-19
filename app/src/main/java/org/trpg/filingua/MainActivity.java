@@ -3,7 +3,7 @@ package org.trpg.filingua;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-
+///File has changed by K-Mano
 public class MainActivity extends AppCompatActivity {
 
     @Override
