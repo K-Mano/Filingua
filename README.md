@@ -1,3 +1,2 @@
 # Filingua
- Filingua™ File Browser
- Next-Gen file management app for Android
+ Filingua™ File Browser is Next-Gen File Management app for Android
