@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Filingua</string>
+    <string name="recents">recents</string>
+    <string name="pinned">pinned</string>
 </resources>
