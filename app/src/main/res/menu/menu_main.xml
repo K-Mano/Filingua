@@ -4,6 +4,11 @@
     <item android:id="@+id/tabButton"
         android:title="Tab"
         android:icon="@drawable/ic_baseline_add_to_photos_24"
-        app:showasaction="always">
+        app:showasaction="ifRoom">
+    </item>
+    <item android:id="@+id/searchButton"
+        android:title="Search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showasaction="ifRoom">
     </item>
 </menu>
