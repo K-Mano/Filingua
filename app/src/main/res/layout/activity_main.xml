@@ -16,7 +16,8 @@
             android:layout_height="?attr/actionBarSize"
             android:elevation="5dp"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:title="Filingua"
+            app:subtitleTextColor="#FFFFFF"
+            app:title="@string/app_name"
             app:titleTextColor="#FFFFFF"></androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
@@ -42,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/pinned" />
         </com.google.android.material.tabs.TabLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -57,9 +59,4 @@
             tools:context=".MainActivity" />
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp" />"
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
