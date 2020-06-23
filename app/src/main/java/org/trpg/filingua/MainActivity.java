@@ -11,14 +11,14 @@ import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-   //muzukasii
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
-        //toolbar.inflateMenu(R.menu.menu_main);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
+        toolbar.inflateMenu(R.menu.menu_main);
     }
+    /*
     //ツールバーメニューの生成
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+    */
     /*
     public void unchi(View view){
         TextView textView = (TextView)findViewById(R.id.text);

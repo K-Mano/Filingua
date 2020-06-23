@@ -18,6 +18,7 @@
             android:elevation="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:subtitleTextColor="#FFFFFF"
+            app:title="@string/app_name"
             app:titleTextColor="#FFFFFF"></androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
@@ -56,6 +57,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:onClick="unchi"
             tools:context=".MainActivity"/>
     </androidx.core.widget.NestedScrollView>
 
