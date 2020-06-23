@@ -2,4 +2,7 @@
     <string name="app_name">Filingua</string>
     <string name="recents">recents</string>
     <string name="pinned">pinned</string>
+    <string name="settings">Settings</string>
+    <string name="tab">Tab</string>
+    <string name="search">Search</string>
 </resources>
