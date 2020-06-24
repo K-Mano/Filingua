@@ -17,9 +17,13 @@ public class MainActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.menu_main);
         //TabLayoutの取得
         TabLayout tabLayout = findViewById(R.id.tab_main);
+        //ViewPagerに設定するAdapterをセットアップ
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
+        //ViewPagerを宣言
         ViewPager viewPager = findViewById(R.id.pager);
+        //Adapterを設定
         viewPager.setAdapter(adapter);
+        //TabLayoutにViewPagerを設定
         tabLayout.setupWithViewPager(viewPager);
     }
     /*
