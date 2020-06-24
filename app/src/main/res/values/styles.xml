@@ -11,6 +11,5 @@
         <item name="colorPrimary">#D84315</item>
         <item name="colorPrimaryDark">#D84315</item>
         <item name="colorAccent">#EF6C00</item>
-        <item name="actionMenuTextColor">#FFFFFF</item>
     </style>
 </resources>
