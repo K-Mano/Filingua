@@ -16,13 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:subtitleTextColor="#FFFFFF"
+            app:layout_scrollFlags="noScroll|enterAlways"
+            app:subtitleTextColor="#CBFFFFFF"
             app:title="@string/app_name"
             app:titleTextColor="#FFFFFF"></androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/tab_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -30,7 +30,8 @@
             app:tabIndicatorColor="#FFFFFF"
             app:tabMode="fixed"
             app:tabRippleColor="#1AFFFFFF"
-            app:tabTextColor="#FFFFFF">
+            app:tabSelectedTextColor="#FFFFFF"
+            app:tabTextColor="#CDFFFFFF">
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/recents_tab"
@@ -52,13 +53,24 @@
         android:layout_height="match_parent"
 
         android:elevation="0dp"
+        android:fillViewport="true"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:onClick="unchi"
-            tools:context=".MainActivity"/>
+            android:layout_height="match_parent">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.viewpager.widget.ViewPager>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
