@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:compat="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/searchButton"
+        android:title="@string/search"
+        android:icon="@drawable/ic_baseline_search_24"
+        compat:showAsAction="ifRoom">
+    </item>
+    <item android:id="@+id/tabButton"
+        android:title="@string/tab"
+        android:icon="@drawable/ic_baseline_add_to_photos_24"
+        compat:showAsAction="ifRoom">
+    </item>
+    <item android:id="@+id/settingsButton"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        compat:showAsAction="never">
+    </item>
+</menu>
