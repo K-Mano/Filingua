@@ -2,6 +2,7 @@ package org.trpg.filingua;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FilinguaUtility {
     private class FileInfo{
@@ -25,5 +26,9 @@ public class FilinguaUtility {
     public FileInfo setFileInfo(String filepath,int filesize){
         FileInfo info = new FileInfo(filepath, filesize);
         return info;
+    }
+    static class CardObject {
+        String title;
+        Date date;
     }
 }

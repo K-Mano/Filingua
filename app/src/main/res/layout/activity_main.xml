@@ -37,7 +37,7 @@
                 android:id="@+id/recents_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/recents" />
+                android:text="@string/overview" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/pinned_tab"
