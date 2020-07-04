@@ -68,9 +68,10 @@
                         android:layout_height="match_parent"
                         android:clipToPadding="false"
                         android:orientation="horizontal"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:scrollbarAlwaysDrawHorizontalTrack="true">
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        tools:listitem="@layout/qa_card">
 
                     </androidx.recyclerview.widget.RecyclerView>
                 </RelativeLayout>

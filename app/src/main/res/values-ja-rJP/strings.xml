@@ -11,4 +11,5 @@
     <string name="storage">ストレージ</string>
     <string name="test">テスト</string>
     <string name="today">今日</string>
+    <string name="closeall">すべてのタブを閉じる</string>
 </resources>
