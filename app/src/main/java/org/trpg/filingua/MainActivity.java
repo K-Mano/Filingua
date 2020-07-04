@@ -2,30 +2,38 @@ package org.trpg.filingua;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //Appbarの子Toolbarにメニューを設定
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
         //TabLayoutの取得
         TabLayout tabLayout = findViewById(R.id.tab_main);
         //ViewPagerに設定するAdapterをセットアップ
-        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
+        TabAdapter tAdapter = new TabAdapter(getSupportFragmentManager());
         //ViewPagerを宣言
         ViewPager viewPager = findViewById(R.id.pager);
         //Adapterを設定
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(tAdapter);
         //TabLayoutにViewPagerを設定
         tabLayout.setupWithViewPager(viewPager);
+
     }
+
     /*
     //ツールバーメニューの生成
     @Override

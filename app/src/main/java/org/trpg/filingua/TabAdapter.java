@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 public class TabAdapter extends FragmentPagerAdapter {
-    private CharSequence[] tabTitles={"recents","pinned"};
+    private CharSequence[] tabTitles= {"overview", "pinned"};
     public TabAdapter(FragmentManager fm) {
         super(fm);
     }
