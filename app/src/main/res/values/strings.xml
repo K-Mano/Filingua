@@ -3,11 +3,12 @@
     <string name="overview">overview</string>
     <string name="pinned">pinned</string>
     <string name="settings">Settings</string>
-    <string name="tab">Tab</string>
+    <string name="tab">Tabs</string>
     <string name="search">Search</string>
     <string name="quick_access">Quick Access</string>
     <string name="other">Other</string>
     <string name="storage">Storage</string>
     <string name="test">Test</string>
     <string name="today">Today</string>
+    <string name="closeall">Close All Tabs</string>
 </resources>

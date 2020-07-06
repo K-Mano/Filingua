@@ -6,6 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -18,9 +23,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // デフォルト遷移アニメーション
+        AnimationSet animation = new AnimationSet(true);
+
         //Appbarの子Toolbarにメニューを設定
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        toolbar.inflateMenu(R.menu.menu_main);
+        Toolbar mainToolbar = findViewById(R.id.main_toolbar);
+        mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+            @Override
+            public boolean onMenuItemClick(MenuItem item){
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.searchButton:
+                        break;
+                    case R.id.tabButton:
+                        LayoutInflater inflator = getLayoutInflater();
+                        View view=inflator.inflate(R.layout.tablist_view, null, false);
+                        view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in));
+                        setContentView(view);
+                        break;
+                    case R.id.settingsButton:
+                        break;
+                }
+                return true;
+            }
+        });
+        //toolbar.inflateMenu(R.menu.menu_main);
+
         //TabLayoutの取得
         TabLayout tabLayout = findViewById(R.id.tab_main);
         //ViewPagerに設定するAdapterをセットアップ
