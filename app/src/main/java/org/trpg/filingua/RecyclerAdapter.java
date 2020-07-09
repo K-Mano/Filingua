@@ -10,9 +10,9 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
 
-    private List<FilinguaUtility.CardObject> list;
+    private List<FilinguaDatabase.CardObject> list;
 
-    public RecyclerAdapter(List<FilinguaUtility.CardObject> cardObjectList) {
+    public RecyclerAdapter(List<FilinguaDatabase.CardObject> cardObjectList) {
         this.list=cardObjectList;
     }
 
