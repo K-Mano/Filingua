@@ -36,10 +36,10 @@ public class RecentsTabFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private List<FilinguaUtility.CardObject> createObject(){
-        List<FilinguaUtility.CardObject> cardObjectList = new ArrayList<>();
+    private List<FilinguaDatabase.CardObject> createObject(){
+        List<FilinguaDatabase.CardObject> cardObjectList = new ArrayList<>();
         for(int i=0;i<4;i++){
-            FilinguaUtility.CardObject object = new FilinguaUtility.CardObject();
+            FilinguaDatabase.CardObject object = new FilinguaDatabase.CardObject();
             object.title="card"+i;
             cardObjectList.add(object);
         }
