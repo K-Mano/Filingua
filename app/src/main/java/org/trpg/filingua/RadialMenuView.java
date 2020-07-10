@@ -43,28 +43,28 @@ public class RadialMenuView extends LinearLayout {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         if(touch==true){
-            // ベース1
-            Paint base=new Paint();
+            // ベース(下)
+            Paint base = new Paint();
             base.setAntiAlias(true);
             base.setStrokeWidth(1);
             base.setColor(Color.rgb(240,240,240));
             base.setStyle(Paint.Style.FILL);
 
-            // ベース2
-            Paint innerBase=new Paint();
+            // ベース(上)
+            Paint innerBase = new Paint();
             innerBase.setAntiAlias(true);
             innerBase.setStrokeWidth(1);
             innerBase.setColor(Color.WHITE);
             innerBase.setStyle(Paint.Style.FILL);
 
-            // メニュー1(Overlay)
+            // メニュー(SelectedOverlay)
             Paint lay1=new Paint();
             lay1.setAntiAlias(true);
             lay1.setStrokeWidth(1);
             lay1.setColor(Color.GRAY);
             lay1.setStyle(Paint.Style.FILL);
 
-            // メニュー2(Overlay)
+            // メニュー(SelectedLineOverlay)
             Paint lay2=new Paint();
             lay2.setAntiAlias(true);
             lay2.setStrokeWidth(1);
@@ -118,8 +118,8 @@ public class RadialMenuView extends LinearLayout {
             case MotionEvent.ACTION_DOWN:
                 posX = event.getX();
                 posY = event.getY();
-                touch = true;
-                return true;
+                //touch = true;
+                return false;
             case MotionEvent.ACTION_UP:
                 touch = false;
                 mPosX = 0;

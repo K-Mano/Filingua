@@ -12,4 +12,5 @@
     <string name="test">テスト</string>
     <string name="today">今日</string>
     <string name="closeall">すべてのタブを閉じる</string>
+    <string name="todayhint">今日のヒント</string>
 </resources>
