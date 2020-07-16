@@ -13,4 +13,5 @@
     <string name="today">今日</string>
     <string name="closeall">すべてのタブを閉じる</string>
     <string name="todayhint">今日のヒント</string>
+    <string name="recent">最近のアクティビティ</string>
 </resources>
