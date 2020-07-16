@@ -12,4 +12,5 @@
     <string name="today">Today</string>
     <string name="closeall">Close All Tabs</string>
     <string name="todayhint">Today\'s Hint</string>
+    <string name="recent">Recent Activities</string>
 </resources>

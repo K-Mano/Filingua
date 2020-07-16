@@ -1,6 +1,7 @@
 package org.trpg.filingua;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,15 +20,24 @@ public class RecentsTabFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.recents_tab, container, false);
         // RecyclerViewを取得
         RecyclerView recyclerView = rootView.findViewById(R.id.quickaccess);
+        RecyclerView recentView   = rootView.findViewById(R.id.recent_activity);
         // LayoutManagerを設定
         LinearLayoutManager lManager = new LinearLayoutManager(getActivity());
         lManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(lManager);
         recyclerView.setHasFixedSize(true);
+        LinearLayoutManager vManager = new LinearLayoutManager(getActivity());
+        vManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recentView.setLayoutManager(vManager);
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        recentView.addItemDecoration(divider);
+        recentView.setHasFixedSize(true);
         // Adapterを作成
-        RecyclerAdapter rAdapter = new RecyclerAdapter(createObject());
+        RecyclerAdapter rAdapter = new RecyclerAdapter(createObject(), R.layout.qa_card);
+        RecyclerAdapter aAdapter = new RecyclerAdapter(createObject(), R.layout.ra_card);
         // Adapterを設定
         recyclerView.setAdapter(rAdapter);
+        recentView.setAdapter(aAdapter);
         return rootView;
     }
 

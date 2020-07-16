@@ -21,7 +21,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/pin_card" />
+                android:id="@+id/recyclertest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/test_card" />
+            android:id="@+id/quickaccess"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            tools:listitem="@layout/qa_card">
         </ScrollView>
     </androidx.core.widget.NestedScrollView>
-
 </LinearLayout>

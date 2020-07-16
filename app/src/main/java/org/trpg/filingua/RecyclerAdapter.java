@@ -11,14 +11,16 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
 
     private List<FilinguaDatabase.CardObject> list;
+    private int layout;
 
-    public RecyclerAdapter(List<FilinguaDatabase.CardObject> cardObjectList) {
-        this.list=cardObjectList;
+    public RecyclerAdapter(List<FilinguaDatabase.CardObject> cardObjectList, int layout) {
+        this.list   = cardObjectList;
+        this.layout = layout;
     }
 
     @Override
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.qa_card,viewGroup,false);
+        View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(layout,viewGroup,false);
         ViewHolder viewHolder = new ViewHolder(inflate);
         return viewHolder;
     }
