@@ -41,16 +41,4 @@ public class FilinguaDatabase {
         FileInfo fileInfo;
 
     }
-    public Path drawRing(float innerR, float outerR, float startAngle, float endAngle, float posX, float posY){
-        Path path = new Path();
-
-        path.moveTo(posX+(float)(outerR*Math.cos(Math.toRadians(startAngle))),posY+(float)(outerR*Math.sin(Math.toRadians(startAngle))));
-        path.arcTo(new RectF(posX-outerR,posY-outerR,posX+outerR,posY+outerR),startAngle,endAngle);
-
-        path.lineTo(posX+(float)(innerR*Math.cos(Math.toRadians(startAngle+endAngle))),posY+(float)(innerR*Math.sin(Math.toRadians(startAngle+endAngle))));
-        path.arcTo(new RectF(posX-innerR, posY-innerR, posX+innerR, posY+innerR),startAngle+endAngle, -endAngle);
-
-        path.close();
-        return path;
-    }
 }

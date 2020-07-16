@@ -25,28 +25,27 @@ public class MainActivity extends AppCompatActivity {
         mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
             @Override
             public boolean onMenuItemClick(MenuItem item){
-                int id = item.getItemId();
-                switch (id){
-                    case R.id.searchButton:
-                        break;
-                    case R.id.tabButton:
-                        LayoutInflater inflator = getLayoutInflater();
-                        // Viewにアニメーションを設定
-                        View view = inflator.inflate(R.layout.tablist_view, null, false);
-                        // アニメーションを開始
-                        view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in));
-                        // Viewを移動
-                        setContentView(view);
-                        break;
-                    case R.id.settingsButton:
-
-                }
-                return true;
+            int id = item.getItemId();
+            switch (id){
+                case R.id.searchButton:
+                    break;
+                case R.id.tabButton:
+                    LayoutInflater inflator = getLayoutInflater();
+                    // Viewにアニメーションを設定
+                    View view = inflator.inflate(R.layout.tablist_view, null, false);
+                    // アニメーションを開始
+                    view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in));
+                    // Viewを移動
+                    setContentView(view);
+                    break;
+                case R.id.settingsButton:
+            }
+            return true;
             }
         });
 
         // TabLayoutの取得
-        TabLayout tabLayout = findViewById(R.id.tab_main);
+        //TabLayout tabLayout = findViewById(R.id.tab_main);
         // ViewPagerに設定するAdapterをセットアップ
         TabAdapter tAdapter = new TabAdapter(getSupportFragmentManager());
         // ViewPagerを宣言
@@ -54,6 +53,6 @@ public class MainActivity extends AppCompatActivity {
         // Adapterを設定
         viewPager.setAdapter(tAdapter);
         // TabLayoutにViewPagerを設定
-        tabLayout.setupWithViewPager(viewPager);
+        //tabLayout.setupWithViewPager(viewPager);
     }
 }
