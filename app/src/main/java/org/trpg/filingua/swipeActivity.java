@@ -50,10 +50,11 @@ public class swipeActivity extends AppCompatActivity {
         for (int index = 0; index < 100; index++) {
             // 一行分のデータ
             NoteDataModel rowData = new NoteDataModel();
-         /*   rowData.setBitmap(/*なんかの画像*/);
+         /*   rowData.setBitmap(/*なんかの画像);*/
           /*  rowData.setmString("この行は" + (index + 1) + "回目の繰り返しです。");*/
             list.add(rowData);
         }
         return list;
     }
 }
+
