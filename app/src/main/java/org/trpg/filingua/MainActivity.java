@@ -3,16 +3,18 @@ package org.trpg.filingua;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
-
 import android.os.Bundle;
-
-
 import android.Manifest;
 import android.app.SearchManager;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.Manifest;
+import android.app.usage.StorageStatsManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,32 +28,38 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
-
 import com.google.android.material.tabs.TabLayout;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    // ストレージ情報
+    private static StorageStatsManager sStatsManager;
+    private static StorageManager sManager;
+    private static List<StorageVolume> sVolumes;
+    public static List<StorageVolume> getAllVolumes() {
+        return sVolumes;
+    }
+    public static StorageStatsManager getStorageStatsManager() {
+        return sStatsManager;
+    }
+    public static StorageManager getsManager() {
+        return sManager;
+    }
+
+    private boolean viewSwitch = false;
+
+    // Fragmentを作成
+    HomeFragment home_frag;
+    PinnedTabFragment pin_frag;
+    // フラグメントのコントローラ
+    FragmentTransaction fTrans = getSupportFragmentManager().beginTransaction();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Appbarの子Toolbarにメニューを設定
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        toolbar.inflateMenu(R.menu.menu_main);
-        //TabLayoutの取得
-        TabLayout tabLayout = findViewById(R.id.tab_main);
-        //ViewPagerに設定するAdapterをセットアップ
-        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        //ViewPagerを宣言
-        ViewPager viewPager = findViewById(R.id.pager);
-        //Adapterを設定
-        viewPager.setAdapter(adapter);
-        //TabLayoutにViewPagerを設定
-        tabLayout.setupWithViewPager(viewPager);
-
-
-
+      
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
         }
@@ -99,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
         sStatsManager = (StorageStatsManager)getSystemService(Context.STORAGE_STATS_SERVICE);
         sVolumes = sManager.getStorageVolumes();
-
         
         //インテントを取得し、アクションを確認してクエリを取得します
         Intent intent = getIntent();
@@ -107,40 +114,38 @@ public class MainActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //doMySearch(query);
         }
-
     }
-    /*
-    //ツールバーメニューの生成
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-    //メニューの選択されたボタンへの処理
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            //検索画面への遷移
-            case R.id.searchButton:
-                break;
-            //タブ一覧画面への遷移
-            case R.id.tabButton:
-                break;
-            //設定画面への遷移
-            case R.id.settingsButton:
-
+    // permissionの確認
+    public void checkPermission() {
+        // 既に許可
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            //setUpWriteExternalStorage();
         }
-        return true;
+        // 拒否
+        else{
+            requestPermission();
+        }
     }
-    */
-    /*
-    public void unchi(View view){
-        TextView textView = (TextView)findViewById(R.id.text);
-        textView.setText("うんち!");
+
+    // 許可を求める
+    private void requestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
     }
-s
-    */
+
+    public void switchPinHomeClicked(View view){
+        viewSwitch = !viewSwitch;
+        if(viewSwitch==true){
+            fTrans.replace(R.id.container, pin_frag);
+        }else{
+            fTrans.replace(R.id.container, home_frag);
+        }
+        fTrans.commit();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -154,5 +159,4 @@ s
 
         return true;
     }
-
 }

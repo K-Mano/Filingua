@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Filingua</string>
+    <string name="overview">概要</string>
+    <string name="pinned">ピン</string>
+    <string name="settings">設定</string>
+    <string name="tab">タブ</string>
+    <string name="search">検索</string>
+    <string name="quick_access">クイック アクセス</string>
+    <string name="other">その他</string>
+    <string name="storage">ストレージ</string>
+    <string name="test">テスト</string>
+    <string name="today">今日</string>
+    <string name="closeall">すべてのタブを閉じる</string>
+    <string name="todayhint">今日のヒント</string>
+    <string name="recent">最近のアクティビティ</string>
+</resources>
