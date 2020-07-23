@@ -1,11 +1,17 @@
 package org.trpg.filingua;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
-
+import android.os.Bundle;
+import android.Manifest;
+import android.app.SearchManager;
+import android.app.usage.StorageStatsManager;
+import android.content.Context;
+import android.content.Intent;
 import android.Manifest;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
@@ -15,15 +21,14 @@ import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
 import com.google.android.material.tabs.TabLayout;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+      
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
         }
@@ -102,7 +107,13 @@ public class MainActivity extends AppCompatActivity {
         sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
         sStatsManager = (StorageStatsManager)getSystemService(Context.STORAGE_STATS_SERVICE);
         sVolumes = sManager.getStorageVolumes();
-
+        
+        //インテントを取得し、アクションを確認してクエリを取得します
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //doMySearch(query);
+        }
     }
     // permissionの確認
     public void checkPermission() {
@@ -134,5 +145,18 @@ public class MainActivity extends AppCompatActivity {
             fTrans.replace(R.id.container, home_frag);
         }
         fTrans.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // SearchViewを取得し、検索可能な構成を設定する
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.searchButton).getActionView();
+        // 現在のアクティビティが検索可能なアクティビティであると仮定します
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+
+        return true;
     }
 }
