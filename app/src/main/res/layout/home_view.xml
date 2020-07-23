@@ -44,18 +44,14 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@drawable/to_white"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout">
 
     </FrameLayout>
 
     <org.trpg.filingua.ColorideScrollView
+        android:id="@+id/colorideScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

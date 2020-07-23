@@ -29,7 +29,7 @@ public class FilinguaDatabase {
         ArrayList<FileInfo> fileList;
     }
 
-    public FileInfo setFileInfo(String filepath,int filesize){
+    public FileInfo setFileInfo(String filepath, int filesize){
         FileInfo info = new FileInfo(filepath, filesize);
         return info;
     }
@@ -46,7 +46,7 @@ public class FilinguaDatabase {
     }
 
     static class DiskInfoDataSet extends DefaultDataSet{
-        DiskInfoDataSet(String name, float max, float used, boolean isPrimary, boolean isRemovable){
+        DiskInfoDataSet(String name, float max, float used, boolean isPrimary, boolean isRemovable, int icon){
             //デフォルトコンストラクタ
             super(name);
 
@@ -57,6 +57,8 @@ public class FilinguaDatabase {
 
             this.isPrimary   = isPrimary;
             this.isRemovable = isRemovable;
+
+            this.icon = icon;
         }
 
         // ストレージ容量
@@ -69,6 +71,8 @@ public class FilinguaDatabase {
         private boolean isPrimary;
         // リムーバブルストレージデバイス
         private boolean isRemovable;
+        // アイコン
+        private int icon;
 
         public float getMax() {
             return max;
@@ -90,6 +94,9 @@ public class FilinguaDatabase {
             return percentage;
         }
 
+        public int getIcon() {
+            return icon;
+        }
     }
 
     public boolean isExternalStorageWritable(){

@@ -19,7 +19,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/drive_icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="24dp"
@@ -36,7 +36,7 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/drive_icon"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView

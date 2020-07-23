@@ -6,10 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.usage.StorageStatsManager;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.util.Log;
@@ -17,18 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class RecentsTabFragment extends Fragment{
-
+public class HomeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         // Viewを設定
-        View rootView = inflater.inflate(R.layout.recents_tab, container, false);
+        View rootView = inflater.inflate(R.layout.home_view, container, false);
         // RecyclerViewを取得
         RecyclerView recyclerView  = rootView.findViewById(R.id.quickaccess);
         RecyclerView recentView    = rootView.findViewById(R.id.recent_activity);
@@ -91,6 +85,8 @@ public class RecentsTabFragment extends Fragment{
         // GB(ギガバイト)
         final int GB = (int)Math.pow(1024, 3);
 
+        // アイコン
+        int icon = 0;
         // デバッグ用コード
         Log.d("StorageManager", "Starting volume information updates");
         Log.d("StorageManager", "############### VOLUME LIST ###############");
@@ -105,11 +101,13 @@ public class RecentsTabFragment extends Fragment{
                 if(volumes.get(count).isPrimary()){
                     Log.d("StorageManager", String.format("Volume %d is primary storage.", count));
                     uuid.add(StorageManager.UUID_DEFAULT);
+                    icon = R.drawable.ic_baseline_storage_24;
                 }else{
                     Log.d("StorageManager", String.format("Volume %d is removable storage.", count));
                     String uid_h = volumes.get(count).getUuid().replace("-","");
                     Log.d("StorageManager", String.format("Volume %d UUID is %s", count, uid_h));
                     uuid.add(UUID.nameUUIDFromBytes(uid_h.getBytes()));
+                    icon = R.drawable.ic_baseline_sd_storage_24;
                 }
                 Log.d("StorageManager", String.format("Volume UUID is \"%s\"", uuid.get(count).toString()));
                 total = sStatsManager.getTotalBytes(uuid.get(count));
@@ -124,7 +122,7 @@ public class RecentsTabFragment extends Fragment{
             }
 
             // リストに情報を格納
-            dataSet.add(new FilinguaDatabase.DiskInfoDataSet(volumes.get(count).getDescription(getContext()), total/GB, used/GB, volumes.get(count).isPrimary(), volumes.get(count).isRemovable()));
+            dataSet.add(new FilinguaDatabase.DiskInfoDataSet(volumes.get(count).getDescription(getContext()), total/GB, used/GB, volumes.get(count).isPrimary(), volumes.get(count).isRemovable(),icon));
         }
 
         Log.d("StorageManager", String.format("Volume information has been successfully updated."));
