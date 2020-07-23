@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchPinHomeClicked(View view){
+        FragmentTransaction fTrans = getSupportFragmentManager().beginTransaction();
         viewSwitch = !viewSwitch;
         if(viewSwitch==true){
             fTrans.replace(R.id.container, pin_frag);
