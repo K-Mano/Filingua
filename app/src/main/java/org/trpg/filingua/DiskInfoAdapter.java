@@ -3,6 +3,7 @@ package org.trpg.filingua;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveV
         viewHolder.capaBar.setMax(100);
         viewHolder.capaBar.setMin(0);
         viewHolder.capaBar.setProgress((int)list.get(pos).getUsedPercentage());
+        viewHolder.icon.setImageResource(list.get(pos).getIcon());
         viewHolder.nameText.setText(list.get(pos).getName());
         viewHolder.capaText.setText(String.format("Used %.1f GB/%.1f GB", list.get(pos).getUsed(),list.get(pos).getMax()));
     }
@@ -42,12 +44,13 @@ public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveV
         public TextView nameText;
         public TextView capaText;
         public ProgressBar capaBar;
-
+        public ImageView icon;
         public DriveViewHolder(View itemView) {
             super(itemView);
             nameText = itemView.findViewById(R.id.disk_label);
             capaText = itemView.findViewById(R.id.disk_space);
             capaBar  = itemView.findViewById(R.id.disk_space_bar);
+            icon     = itemView.findViewById(R.id.drive_icon);
         }
     }
 }

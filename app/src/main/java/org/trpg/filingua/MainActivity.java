@@ -3,6 +3,7 @@ package org.trpg.filingua;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
@@ -41,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
         return sManager;
     }
 
+    private boolean viewSwitch = false;
+
+    // Fragmentを作成
+    HomeFragment home_frag;
+    PinnedTabFragment pin_frag;
+    // フラグメントのコントローラ
+    FragmentTransaction fTrans = getSupportFragmentManager().beginTransaction();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +58,14 @@ public class MainActivity extends AppCompatActivity {
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
         }
+
+        if(savedInstanceState==null){
+            home_frag = new HomeFragment();
+            pin_frag = new PinnedTabFragment();
+            fTrans.replace(R.id.container, home_frag);
+            fTrans.commit();
+        }
+
         // Appbarの子Toolbarにメニューを設定
         Toolbar mainToolbar = findViewById(R.id.main_toolbar);
         // Toolbarのメニュー項目のClickイベントリスナー
@@ -62,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.tabButton:
                     LayoutInflater inflator = getLayoutInflater();
                     // Viewにアニメーションを設定
-                    View view = inflator.inflate(R.layout.tablist_view, null, false);
+                    //View view = inflator.inflate(R.layout.tablist_view, null, false);
                     // アニメーションを開始
                     //view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in));
                     // Viewを移動
@@ -75,11 +92,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ViewPagerに設定するAdapterをセットアップ
-        TabAdapter tAdapter = new TabAdapter(getSupportFragmentManager());
+        //TabAdapter tAdapter = new TabAdapter(getSupportFragmentManager());
         // ViewPagerを宣言
-        ViewPager viewPager = findViewById(R.id.pager);
+        //ViewPager viewPager = findViewById(R.id.pager);
         // Adapterを設定
-        viewPager.setAdapter(tAdapter);
+        //viewPager.setAdapter(tAdapter);
 
         // SAFの取得
         sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
@@ -107,5 +124,15 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
+    }
+
+    public void switchPinHomeClicked(View view){
+        viewSwitch = !viewSwitch;
+        if(viewSwitch==true){
+            fTrans.replace(R.id.container, pin_frag);
+        }else{
+            fTrans.replace(R.id.container, home_frag);
+        }
+        fTrans.commit();
     }
 }
