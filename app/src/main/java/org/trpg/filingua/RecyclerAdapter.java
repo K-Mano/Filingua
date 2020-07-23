@@ -1,45 +1,44 @@
 package org.trpg.filingua;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<FilinguaDatabase.CardObject> list;
+    private List<FilinguaDatabase.DefaultDataSet> list;
     private int layout;
 
-    public RecyclerAdapter(List<FilinguaDatabase.CardObject> cardObjectList, int layout) {
-        this.list   = cardObjectList;
+    public RecyclerAdapter(List<FilinguaDatabase.DefaultDataSet> dataSet, int layout) {
+        this.list   = dataSet;
         this.layout = layout;
     }
 
     @Override
-    public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(layout,viewGroup,false);
-        ViewHolder viewHolder = new ViewHolder(inflate);
+        RecyclerView.ViewHolder viewHolder = new ViewHolderDefault(inflate);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int pos) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int pos) {
 
     }
-
 
     @Override
     public int getItemCount() {
         return list.size();
     }
 
-    // ViewHolder(固有ならインナークラスでOK)
-    class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(View itemView) {
+    //　ViewHolder(デフォルト)
+    class ViewHolderDefault extends RecyclerView.ViewHolder{
+        public ViewHolderDefault(View itemView) {
             super(itemView);
+            /// RecyclerViewのテスト用 ///
         }
     }
 
