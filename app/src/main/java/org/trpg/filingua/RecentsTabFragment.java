@@ -80,22 +80,26 @@ public class RecentsTabFragment extends Fragment{
 
         List<FilinguaDatabase.DiskInfoDataSet> dataSet = new ArrayList<>();
         List<StorageVolume> volumes = sManager.getStorageVolumes();
+
+        // ストレージ識別用UUID
         List<UUID> uuid = new ArrayList<>();
 
+        // 容量情報
         float used;
         float total;
 
         // GB(ギガバイト)
         final int GB = (int)Math.pow(1024, 3);
 
-        //デバッグ用コード
+        // デバッグ用コード
         Log.d("StorageManager", "Starting volume information updates");
         Log.d("StorageManager", "############### VOLUME LIST ###############");
         for(int count=0; count<volumes.size(); count++){
             Log.d("StorageManager", String.format("Volume %d: \"%s\", Status=\"%s\"", count, volumes.get(count).getDescription(getContext()), volumes.get(count).getState()));
         }
         Log.d("StorageManager", "###########################################");
-        //--------------
+
+        // 情報を取得して構造体に格納
         for(int count=0; count<volumes.size(); count++){
             try {
                 if(volumes.get(count).isPrimary()){
@@ -103,18 +107,23 @@ public class RecentsTabFragment extends Fragment{
                     uuid.add(StorageManager.UUID_DEFAULT);
                 }else{
                     Log.d("StorageManager", String.format("Volume %d is removable storage.", count));
-                    uuid.add(UUID.nameUUIDFromBytes(volumes.get(count).getUuid().getBytes()));
+                    String uid_h = volumes.get(count).getUuid().replace("-","");
+                    Log.d("StorageManager", String.format("Volume %d UUID is %s", count, uid_h));
+                    uuid.add(UUID.nameUUIDFromBytes(uid_h.getBytes()));
                 }
                 Log.d("StorageManager", String.format("Volume UUID is \"%s\"", uuid.get(count).toString()));
                 total = sStatsManager.getTotalBytes(uuid.get(count));
                 used  = total - (sStatsManager.getFreeBytes(uuid.get(count)));
+                Log.d("StorageManager", String.format("Volume %d loaded.",count));
             }catch (Exception e){
                 Log.d("StorageManager", String.format("Error in Volume %d: %s",count ,e));
+                Log.d("StorageManager", String.format("Volume %d unloaded.",count));
+                // リセット
                 total = 0;
                 used  = 0;
             }
 
-            Log.d("StorageManager", String.format("Volume %d %s.",count,volumes.get(0).getState()));
+            // リストに情報を格納
             dataSet.add(new FilinguaDatabase.DiskInfoDataSet(volumes.get(count).getDescription(getContext()), total/GB, used/GB, volumes.get(count).isPrimary(), volumes.get(count).isRemovable()));
         }
 

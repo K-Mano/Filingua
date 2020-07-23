@@ -12,7 +12,7 @@ import org.trpg.filingua.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class swipeActivity extends AppCompatActivity {
     RecyclerView mRecyclerViewList;
 
@@ -51,10 +51,10 @@ public class swipeActivity extends AppCompatActivity {
             // 一行分のデータ
             NoteDataModel rowData = new NoteDataModel();
          /*   rowData.setBitmap(/*なんかの画像);*/
-          /*  rowData.setmString("この行は" + (index + 1) + "回目の繰り返しです。");*/
+          /*  rowData.setmString("この行は" + (index + 1) + "回目の繰り返しです。");
             list.add(rowData);
         }
         return list;
     }
 }
-
+*/

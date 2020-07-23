@@ -40,7 +40,7 @@
         android:id="@+id/appbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/grd_background3"
+        android:background="@android:color/transparent"
         android:elevation="0dp"
         app:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"

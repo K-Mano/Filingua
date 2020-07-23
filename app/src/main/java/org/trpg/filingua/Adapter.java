@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 import org.trpg.filingua.DataModel;
 import org.trpg.filingua.R;
 import org.trpg.filingua.ViewHolder;
@@ -41,11 +44,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         return insertDataList.size();
     }
 }
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
-import java.util.List;
-
+/*
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<Filingainfo.tabCard> list;
@@ -101,5 +100,5 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             adapter.remove(swipedPosition);
         }
     };
-}
+}*/
 

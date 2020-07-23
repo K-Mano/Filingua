@@ -2,7 +2,7 @@ package org.trpg.filingua;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
+/*
 public class swipe_activity {
     ItemTouchHelper = new ItemTouchHelper.SimpleCallback(){
         @Override
@@ -13,4 +13,4 @@ public class swipe_activity {
         public void onSwiped
     }
 
-}
+}*/
