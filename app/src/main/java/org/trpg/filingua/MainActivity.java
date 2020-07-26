@@ -4,8 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
+
+import android.animation.ValueAnimator;
+import android.content.res.Resources;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.Manifest;
 import android.app.SearchManager;
@@ -20,14 +26,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import java.util.List;
 
@@ -48,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean viewSwitch = false;
+    FloatingActionButton fab;
 
     // Fragmentを作成
     HomeFragment home_frag;
@@ -96,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        fab = findViewById(R.id.home_pin_switch);
+
         // ViewPagerに設定するAdapterをセットアップ
         //TabAdapter tAdapter = new TabAdapter(getSupportFragmentManager());
         // ViewPagerを宣言
@@ -115,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             //doMySearch(query);
         }
     }
+
     // permissionの確認
     public void checkPermission() {
         // 既に許可
@@ -137,13 +152,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
+    }
+
     public void switchPinHomeClicked(View view){
         FragmentTransaction fTrans = getSupportFragmentManager().beginTransaction();
         viewSwitch = !viewSwitch;
+        home_frag = new HomeFragment();
+        pin_frag = new PinnedTabFragment();
         if(viewSwitch==true){
+            home_frag.setExitTransition(new Fade());
+            pin_frag.setEnterTransition(new Fade());
             fTrans.replace(R.id.container, pin_frag);
+            fab.setImageResource(R.drawable.ic_baseline_home_24);
         }else{
+            home_frag.setEnterTransition(new Fade());
+            pin_frag.setExitTransition(new Fade());
             fTrans.replace(R.id.container, home_frag);
+            fab.setImageResource(R.drawable.ic_security_pin);
         }
         fTrans.commit();
     }
@@ -153,10 +188,10 @@ public class MainActivity extends AppCompatActivity {
 
         // SearchViewを取得し、検索可能な構成を設定する
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.searchButton).getActionView();
+        //SearchView searchView = (SearchView) menu.findItem(R.id.searchButton).getActionView();
         // 現在のアクティビティが検索可能なアクティビティであると仮定します
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        //searchView.setIconifiedByDefault(false);
 
         return true;
     }

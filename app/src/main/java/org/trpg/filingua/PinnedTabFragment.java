@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class PinnedTabFragment extends Fragment {
         tabview.setLayoutManager(tManager);
 
         tabview.setHasFixedSize(true);
-       // sAdapter  = new RecyclerAdapter(createObject(hoge),R.layout.pin_card);
+        sAdapter  = new RecyclerAdapter(createObject(hoge),R.layout.pin_card);
         tabview.setAdapter(sAdapter);
         swipeToDismissTouchHelper.attachToRecyclerView(tabview);
 
