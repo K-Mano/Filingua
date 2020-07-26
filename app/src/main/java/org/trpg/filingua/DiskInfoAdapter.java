@@ -1,12 +1,18 @@
 package org.trpg.filingua;
 
+import android.app.Application;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
@@ -32,7 +38,30 @@ public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveV
         viewHolder.capaBar.setProgress((int)list.get(pos).getUsedPercentage());
         viewHolder.icon.setImageResource(list.get(pos).getIcon());
         viewHolder.nameText.setText(list.get(pos).getName());
-        viewHolder.capaText.setText(String.format("Used %.1f GB/%.1f GB", list.get(pos).getUsed(),list.get(pos).getMax()));
+        viewHolder.capaText.setText(String.format("%.1f GB/%.1f GB 使用中", list.get(pos).getUsed(),list.get(pos).getMax()));
+        viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //押したとき
+                    startScalingAnimEnter(v);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    //離したとき
+                    startScalingAnimExit(v);
+                }
+                return false;
+            }
+        });
+    }
+
+    private void startScalingAnimEnter(View view){
+        Animation animation = AnimationUtils.loadAnimation(MyApplication.getInstance().getApplicationContext(), R.anim.scale_animation_enter);
+        view.startAnimation(animation);
+    }
+
+    private void startScalingAnimExit(View view){
+        Animation animation = AnimationUtils.loadAnimation(MyApplication.getInstance().getApplicationContext(), R.anim.scale_animation_exit);
+        view.startAnimation(animation);
     }
 
     @Override
