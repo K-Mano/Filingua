@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.provider.SearchRecentSuggestions;
 import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,13 +122,25 @@ public class MainActivity extends AppCompatActivity {
         sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
         sStatsManager = (StorageStatsManager)getSystemService(Context.STORAGE_STATS_SERVICE);
         sVolumes = sManager.getStorageVolumes();
-        
+
+        /*
         //インテントを取得し、アクションを確認してクエリを取得します
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            //doMySearch(query);
+
+            //コンテンツプロバイダが宣言したのと同じ権限とデータベース　モードが必要
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+
+            //1つめのパラメータとして検索クエリ文字列を受け取る
+            //候補の二つ目として含める２つ目の文字列(または null)を必要に応じて受け取る
+            suggestions.saveRecentQuery(query,null);
+
         }
+
+         */
+
     }
 
     // permissionの確認
