@@ -7,10 +7,12 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/drive_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
+        android:foregroundTint="#FFFFFF"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp">
 

@@ -61,6 +61,8 @@ public class FilinguaDatabase {
             this.icon = icon;
         }
 
+        // ドライブのパス
+        private Directory path;
         // ストレージ容量
         private float max;
         // ストレージ使用量

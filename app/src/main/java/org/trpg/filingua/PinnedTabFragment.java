@@ -65,11 +65,9 @@ public class PinnedTabFragment extends Fragment {
 
             @Override
             public void onSwiped( RecyclerView.ViewHolder viewHolder, int direction) {
-
                     List<FilinguaDatabase.DefaultDataSet> cardList = new ArrayList<>();
                     cardList.remove(viewHolder.getAdapterPosition());
                     sAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-
             }
 
             @Override
@@ -98,8 +96,5 @@ public class PinnedTabFragment extends Fragment {
         }
         return DefaltDataSetList;
     }
-
-
-
 }
 

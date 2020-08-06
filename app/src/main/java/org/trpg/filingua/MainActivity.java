@@ -27,11 +27,14 @@ import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.transition.Fade;
+import android.util.Log;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -40,9 +43,21 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Context context;
 
     // ストレージ情報
     private static StorageStatsManager sStatsManager;
@@ -58,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         return sManager;
     }
 
+    File settings;
+
     private boolean viewSwitch = false;
     FloatingActionButton fab;
 
@@ -71,9 +88,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-      
+
+        context = MainActivity.this.getApplicationContext();
+        settings = new File(context.getFilesDir(), "settings.xml");
+
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
+        }
+
+        // 設定ファイルの読み込み/書き込み
+        if(!settings.exists()){
+            writeXml(settings);
+            Log.d("FileStreaming", "Created Settings File.");
+        }else{
+            Log.d("FileStreaming", "Settings File is exist.");
         }
 
         if(savedInstanceState==null){
@@ -108,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // FAB
         fab = findViewById(R.id.home_pin_switch);
 
         // ViewPagerに設定するAdapterをセットアップ
@@ -127,6 +156,55 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //doMySearch(query);
+        }
+    }
+
+    // XML書き出し
+    public void writeXml(File file){
+        try {
+            // ファイル出力ストリームを作る
+            BufferedWriter bufferWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getName(), false)));
+
+            XmlSerializer xmlse = Xml.newSerializer();
+            xmlse.setOutput(bufferWriter);
+
+            OutputStream out = this.openFileOutput(file.getPath(), MODE_PRIVATE);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+            xmlse.setOutput(writer);
+
+            // ドキュメントのスタート
+            xmlse.startDocument(null, Boolean.TRUE);
+            xmlse.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+
+            // データ入力
+            xmlse.startTag(null, "rootNode");
+
+
+            // バッファにためてあるモノを書き込む
+                /*
+                for (int i = 0; i < this.mItemList.size(); i++) {
+                    XmlItem curr = this.mItemList.get(i);
+
+                    // Itemノードを書き出す
+                    xmlse.startTag(null, "item");
+                    xmlse.attribute(null, "no", curr.no + "");
+                    xmlse.text(curr.text);
+                    xmlse.endTag(null, "item");
+                }
+                */
+
+            xmlse.endTag(null, "rootNode");
+
+            // タグの終了と書き出し
+            xmlse.endDocument();
+            xmlse.flush();
+
+            out.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
