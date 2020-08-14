@@ -103,9 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState==null){
             fTrans = getSupportFragmentManager().beginTransaction();
-
-            // BackStack
-            fTrans.addToBackStack(null);
             home_frag = new HomeFragment();
             pin_frag = new PinnedTabFragment();
             fTrans.replace(R.id.container, HomeFragment.newInstance(0));

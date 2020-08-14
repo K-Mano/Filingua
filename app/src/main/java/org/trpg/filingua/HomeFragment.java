@@ -1,6 +1,7 @@
 package org.trpg.filingua;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,21 +45,19 @@ public class HomeFragment extends Fragment{
     private DiskInfoAdapter dAdapter;
 
     // パラメータ
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_COUNT = "count";
 
-    private String mParam1;
-    private String mParam2;
+    private String tCount;
+    private int cnt;
 
     private TextView date;
 
     private SwipeRefreshLayout srl;
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(int count) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_COUNT, count);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,12 +66,6 @@ public class HomeFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         // Viewを設定
         View rootView = inflater.inflate(R.layout.home_view, container, false);
-
-        // パラメータをセット
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         // RecyclerViewを取得
         quickView     = (RecyclerView)rootView.findViewById(R.id.quickaccess);
@@ -123,7 +116,12 @@ public class HomeFragment extends Fragment{
         dAdapter.setOnItemClickListener(new DiskInfoAdapter.onItemClickListener() {
             @Override
             public void onClick(View view, int pos) {
-                Toast.makeText(context, String.valueOf(driveInfo.get(pos).getName()), Toast.LENGTH_SHORT).show();
+                FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+                //fTrans.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                fTrans.addToBackStack(null);
+                fTrans.replace(R.id.container, WindowFragment.newInstance(cnt));
+                fTrans.commit();
+                //Toast.makeText(context, String.valueOf(driveInfo.get(pos).getName()), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -137,6 +135,18 @@ public class HomeFragment extends Fragment{
         date.setText(DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_ALL));
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        Bundle args = getArguments();
+
+        if(args != null){
+            int count = args.getInt("count");
+            String str = "HomeFragment: "+ count;
+            cnt = count + 1;
+        }
     }
 
     protected void reload(){
@@ -181,11 +191,6 @@ public class HomeFragment extends Fragment{
             }, 1000);
         }
     };
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
-        super.onViewCreated(view, savedInstanceState);
-    }
 
     private List<FilinguaDatabase.DefaultDataSet> createObject(int amount){
         List<FilinguaDatabase.DefaultDataSet> dataSet = new ArrayList<>();
