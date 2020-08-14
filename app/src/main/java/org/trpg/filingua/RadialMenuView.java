@@ -27,7 +27,7 @@ public class RadialMenuView extends LinearLayout {
     private String title;
     private RadialMenuContents content;
 
-    private boolean touch=false;
+    private boolean touch = false;
 
     private float posX;
     private float posY;
@@ -118,15 +118,15 @@ public class RadialMenuView extends LinearLayout {
             case MotionEvent.ACTION_DOWN:
                 posX = event.getX();
                 posY = event.getY();
-                //touch = true;
-                return false;
+                touch = true;
+                return true;
             case MotionEvent.ACTION_UP:
                 touch = false;
                 mPosX = 0;
                 mPosY = 0;
                 posX  = 0;
                 posY  = 0;
-                return false;
+                return true;
             case MotionEvent.ACTION_MOVE:
                 mPosX=event.getX();
                 mPosY=event.getY();

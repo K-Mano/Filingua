@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:compat="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/searchButton"
+    <item
+        android:id="@+id/searchView"
+        android:icon="@android:drawable/ic_menu_search"
         android:title="@string/search"
-        android:icon="@drawable/ic_baseline_search_24"
-        compat:showAsAction="ifRoom">
+        compat:showAsAction="ifRoom"
+        compat:actionViewClass="android.widget.SearchView">
     </item>
     <item android:id="@+id/tabButton"
         android:title="@string/tab"

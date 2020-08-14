@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import java.util.List;
 public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveViewHolder> {
 
     private List<FilinguaDatabase.DiskInfoDataSet> list;
+    private onItemClickListener listener;
 
     public DiskInfoAdapter(List<FilinguaDatabase.DiskInfoDataSet> dataSet) {
         this.list = dataSet;
@@ -32,36 +34,27 @@ public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveV
     }
 
     @Override
-    public void onBindViewHolder(DriveViewHolder viewHolder, int pos) {
+    public void onBindViewHolder(DriveViewHolder viewHolder, final int pos) {
         viewHolder.capaBar.setMax(100);
         viewHolder.capaBar.setMin(0);
         viewHolder.capaBar.setProgress((int)list.get(pos).getUsedPercentage());
         viewHolder.icon.setImageResource(list.get(pos).getIcon());
         viewHolder.nameText.setText(list.get(pos).getName());
         viewHolder.capaText.setText(String.format("%.1f GB/%.1f GB 使用中", list.get(pos).getUsed(),list.get(pos).getMax()));
-        viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+        viewHolder.card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //押したとき
-                    startScalingAnimEnter(v);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //離したとき
-                    startScalingAnimExit(v);
-                }
-                return false;
+            public void onClick(View view) {
+                listener.onClick(view, pos);
             }
         });
     }
 
-    private void startScalingAnimEnter(View view){
-        Animation animation = AnimationUtils.loadAnimation(MyApplication.getInstance().getApplicationContext(), R.anim.scale_animation_enter);
-        view.startAnimation(animation);
+    public void setOnItemClickListener(onItemClickListener listener) {
+        this.listener = listener;
     }
 
-    private void startScalingAnimExit(View view){
-        Animation animation = AnimationUtils.loadAnimation(MyApplication.getInstance().getApplicationContext(), R.anim.scale_animation_exit);
-        view.startAnimation(animation);
+    public interface onItemClickListener {
+        void onClick(View view, int pos);
     }
 
     @Override
@@ -74,8 +67,10 @@ public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveV
         public TextView capaText;
         public ProgressBar capaBar;
         public ImageView icon;
+        public CardView card;
         public DriveViewHolder(View itemView) {
             super(itemView);
+            card     = itemView.findViewById(R.id.drive_card);
             nameText = itemView.findViewById(R.id.disk_label);
             capaText = itemView.findViewById(R.id.disk_space);
             capaBar  = itemView.findViewById(R.id.disk_space_bar);
