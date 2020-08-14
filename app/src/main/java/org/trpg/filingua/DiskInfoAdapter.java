@@ -20,7 +20,7 @@ import java.util.List;
 public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveViewHolder> {
 
     private List<FilinguaDatabase.DiskInfoDataSet> list;
-    private View.OnClickListener listener;
+    private onItemClickListener listener;
 
     public DiskInfoAdapter(List<FilinguaDatabase.DiskInfoDataSet> dataSet) {
         this.list = dataSet;
@@ -34,13 +34,27 @@ public class DiskInfoAdapter extends RecyclerView.Adapter<DiskInfoAdapter.DriveV
     }
 
     @Override
-    public void onBindViewHolder(DriveViewHolder viewHolder, int pos) {
+    public void onBindViewHolder(DriveViewHolder viewHolder, final int pos) {
         viewHolder.capaBar.setMax(100);
         viewHolder.capaBar.setMin(0);
         viewHolder.capaBar.setProgress((int)list.get(pos).getUsedPercentage());
         viewHolder.icon.setImageResource(list.get(pos).getIcon());
         viewHolder.nameText.setText(list.get(pos).getName());
         viewHolder.capaText.setText(String.format("%.1f GB/%.1f GB 使用中", list.get(pos).getUsed(),list.get(pos).getMax()));
+        viewHolder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(view, pos);
+            }
+        });
+    }
+
+    public void setOnItemClickListener(onItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onItemClickListener {
+        void onClick(View view, int pos);
     }
 
     @Override

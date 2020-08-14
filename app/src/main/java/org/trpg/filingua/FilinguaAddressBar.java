@@ -16,5 +16,4 @@ public class FilinguaAddressBar extends LinearLayout {
     public FilinguaAddressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
 }

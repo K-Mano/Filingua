@@ -63,9 +63,6 @@ public class MainActivity extends AppCompatActivity {
     private static StorageStatsManager sStatsManager;
     private static StorageManager sManager;
     private static List<StorageVolume> sVolumes;
-    public static List<StorageVolume> getAllVolumes() {
-        return sVolumes;
-    }
     public static StorageStatsManager getStorageStatsManager() {
         return sStatsManager;
     }
@@ -82,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     HomeFragment home_frag;
     PinnedTabFragment pin_frag;
     // フラグメントのコントローラ
-    FragmentTransaction fTrans = getSupportFragmentManager().beginTransaction();
+    FragmentTransaction fTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +102,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(savedInstanceState==null){
+            fTrans = getSupportFragmentManager().beginTransaction();
+
+            // BackStack
+            fTrans.addToBackStack(null);
             home_frag = new HomeFragment();
             pin_frag = new PinnedTabFragment();
-            fTrans.replace(R.id.container, home_frag);
+            fTrans.replace(R.id.container, HomeFragment.newInstance(0));
             fTrans.commit();
         }
 
@@ -119,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item){
             int id = item.getItemId();
             switch (id){
-                case R.id.searchButton:
-                    break;
+                //case R.id.searchView:
+                //    break;
                 case R.id.tabButton:
                     LayoutInflater inflator = getLayoutInflater();
                     // Viewにアニメーションを設定
@@ -240,6 +241,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    public void moveTo(int layout){
+
     }
 
     public void switchPinHomeClicked(View view){

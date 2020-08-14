@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,23 +36,43 @@ public class HomeFragment extends Fragment{
 
     //データセット
     private List<FilinguaDatabase.DiskInfoDataSet> driveInfo;
+    private List<FilinguaDatabase.DefaultDataSet> raList;
 
     // アダプター
     private RecyclerAdapter rAdapter;
     private RecyclerAdapter aAdapter;
     private DiskInfoAdapter dAdapter;
 
+    // パラメータ
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private String mParam1;
+    private String mParam2;
+
     private TextView date;
 
     private SwipeRefreshLayout srl;
 
-    // ディレクトリのリスト
-    List<FilinguaDatabase.DefaultDataSet> raList;
+    public static HomeFragment newInstance(String param1, String param2) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         // Viewを設定
         View rootView = inflater.inflate(R.layout.home_view, container, false);
+
+        // パラメータをセット
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
 
         // RecyclerViewを取得
         quickView     = (RecyclerView)rootView.findViewById(R.id.quickaccess);
@@ -78,7 +99,7 @@ public class HomeFragment extends Fragment{
         driveListView.setHasFixedSize(true);
 
         //Dividerの設定
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration divider = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
         recentView.addItemDecoration(divider);
 
         // スワイプ機能
@@ -97,6 +118,14 @@ public class HomeFragment extends Fragment{
         rAdapter = new RecyclerAdapter(createObject(3), R.layout.qa_card);
         aAdapter = new RecyclerAdapter(raList, R.layout.ra_card);
         dAdapter = new DiskInfoAdapter(driveInfo);
+
+        // RecyclerViewのitemへのonClickListener紐づけ
+        dAdapter.setOnItemClickListener(new DiskInfoAdapter.onItemClickListener() {
+            @Override
+            public void onClick(View view, int pos) {
+                Toast.makeText(context, String.valueOf(driveInfo.get(pos).getName()), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Adapterを設定
         quickView.setAdapter(rAdapter);
@@ -123,7 +152,7 @@ public class HomeFragment extends Fragment{
 
     @Override
     public void onDetach(){
-        context=null;
+        context = null;
         super.onDetach();
     }
 
@@ -204,7 +233,7 @@ public class HomeFragment extends Fragment{
                 }else{
                     Log.d("StorageManager", String.format("Volume %d is removable storage.", count));
                     String uid_h = volumes.get(count).getUuid().replace("-","");
-                    Log.d("StorageManager", String.format("Volume %d UUID is %s", count, uid_h));
+                    //Log.d("StorageManager", String.format("Volume %d UUID is %s", count, uid_h));
                     uuid.add(UUID.nameUUIDFromBytes(uid_h.getBytes()));
                     icon = R.drawable.ic_baseline_sd_storage_24;
                 }
