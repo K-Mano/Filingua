@@ -1,31 +1,63 @@
 package org.trpg.filingua;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-public class TabAdapter extends FragmentPagerAdapter {
-    private CharSequence[] tabTitles= {"overview", "pinned"};
-    public TabAdapter(FragmentManager fm) {
-        super(fm);
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+public class TabAdapter extends RecyclerView.Adapter<TabAdapter.TabsViewHolder> {
+
+    private List<FilinguaDatabase.Tab> list;
+    private TabAdapter.onItemClickListener listener;
+
+    public TabAdapter(List<FilinguaDatabase.Tab> tabs) {
+        this.list = tabs;
     }
+
     @Override
-    public CharSequence getPageTitle(int position){
-        return tabTitles[position];
+    public TabAdapter.TabsViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.tab_card,viewGroup,false);
+        TabAdapter.TabsViewHolder viewHolder = new TabAdapter.TabsViewHolder(inflate);
+        return viewHolder;
     }
+
     @Override
-    public Fragment getItem(int position){
-        switch(position){
-            case 0:
-                return new HomeFragment();
-            case 1:
-                return new PinnedTabFragment();
-            default:
-                return null;
+    public void onBindViewHolder(TabAdapter.TabsViewHolder viewHolder, final int pos) {
+        viewHolder.title.setText(list.get(pos).getName());
+        viewHolder.tab_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(view, pos);
+            }
+        });
+    }
+
+    public void setOnItemClickListener(TabAdapter.onItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onItemClickListener {
+        void onClick(View view, int pos);
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    //　ViewHolder(デフォルト)
+    class TabsViewHolder extends RecyclerView.ViewHolder{
+        public CardView tab_card;
+        public TextView title;
+        public TabsViewHolder(View itemView) {
+            super(itemView);
+            tab_card = itemView.findViewById(R.id.tab_card);
+            title    = itemView.findViewById(R.id.tab_name);
         }
-    }
-    @Override
-    public int getCount(){
-        return tabTitles.length;
     }
 }
