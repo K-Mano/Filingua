@@ -6,12 +6,23 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.MotionEvent;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import static android.content.Context.WINDOW_SERVICE;
 
 public class RadialMenuView extends LinearLayout {
     public RadialMenuView(Context context){
@@ -20,6 +31,11 @@ public class RadialMenuView extends LinearLayout {
     }
     public RadialMenuView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setWillNotDraw(false);
+    }
+
+    public RadialMenuView(Context context,AttributeSet attrs,int defStyle){
+        super(context,attrs,defStyle);
         setWillNotDraw(false);
     }
 
@@ -38,6 +54,8 @@ public class RadialMenuView extends LinearLayout {
     public RadialMenuResult Show(int posX, int posY){
         return null;
     }
+
+    Drawable drawable= getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
 
     @Override
     protected void onDraw(Canvas canvas){
@@ -58,7 +76,7 @@ public class RadialMenuView extends LinearLayout {
             innerBase.setStyle(Paint.Style.FILL);
 
             // メニュー(SelectedOverlay)
-            Paint lay1=new Paint();
+            Paint lay1 = new Paint();
             lay1.setAntiAlias(true);
             lay1.setStrokeWidth(1);
             lay1.setColor(Color.GRAY);
@@ -78,6 +96,17 @@ public class RadialMenuView extends LinearLayout {
             canvas.drawPath(drawRing(150,450,0 ,-180,posX,posY),base);
             canvas.drawPath(drawRing(150,375,0 ,180,posX,posY),innerBase);
             canvas.drawPath(drawRing(150,375,0 ,-180,posX,posY),innerBase);
+
+            // アイコンの描画
+            Bitmap a = drawableToBitmap(drawable,128,128, (int)posX-260, (int)posY, Color.GRAY);
+            Bitmap b = drawableToBitmap(drawable,128,128, (int)posX+260, (int)posY, Color.GRAY);
+            Bitmap c = drawableToBitmap(drawable,128,128, (int)posX, (int)posY-260, Color.GRAY);
+            Bitmap d = drawableToBitmap(drawable,128,128, (int)posX, (int)posY+260, Color.GRAY);
+
+            canvas.drawBitmap(a,new Matrix(), base);
+            canvas.drawBitmap(b,new Matrix(), base);
+            canvas.drawBitmap(c,new Matrix(), base);
+            canvas.drawBitmap(d,new Matrix(), base);
 
             if(Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))<=400 && Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))>=150){
                 if(Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))>=45 && Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))<=135){
@@ -110,6 +139,25 @@ public class RadialMenuView extends LinearLayout {
         path.arcTo(new RectF(posX-innerR, posY-innerR, posX+innerR, posY+innerR), endAngle, startAngle-endAngle);
         path.close();
         return path;
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable, int height, int width, int centerX, int centerY, int color){
+
+        if(drawable instanceof BitmapDrawable){
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        int left = centerX-(width/2);
+        int top = centerY-(height/2);
+
+        Bitmap bitmap = Bitmap.createBitmap(2000, 2000, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
+        drawable.setBounds(left, top, left+width, top+height);
+        drawable.setColorFilter(color, mode);
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
     @Override

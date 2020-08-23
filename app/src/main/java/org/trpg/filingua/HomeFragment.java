@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -119,7 +121,8 @@ public class HomeFragment extends Fragment{
                 FragmentTransaction fTrans = getFragmentManager().beginTransaction();
                 //fTrans.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 fTrans.addToBackStack(null);
-                fTrans.replace(R.id.container, WindowFragment.newInstance(cnt));
+                MainActivity.getTabs().add(new FilinguaDatabase.Tab(driveInfo.get(pos).getName(), null, R.layout.fragment_window, false));
+                fTrans.replace(R.id.container, WindowFragment.newInstance(cnt, String.valueOf(driveInfo.get(pos).getPath())));
                 fTrans.commit();
                 //Toast.makeText(context, String.valueOf(driveInfo.get(pos).getName()), Toast.LENGTH_SHORT).show();
             }
@@ -131,7 +134,7 @@ public class HomeFragment extends Fragment{
         driveListView.setAdapter(dAdapter);
 
         // 日付表示
-        date = (TextView)rootView.findViewById(R.id.dateView);
+        date = rootView.findViewById(R.id.dateView);
         date.setText(DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_ALL));
 
         return rootView;
@@ -238,11 +241,9 @@ public class HomeFragment extends Fragment{
                 }else{
                     Log.d("StorageManager", String.format("Volume %d is removable storage.", count));
                     String uid_h = volumes.get(count).getUuid().replace("-","");
-                    //Log.d("StorageManager", String.format("Volume %d UUID is %s", count, uid_h));
                     uuid.add(UUID.nameUUIDFromBytes(uid_h.getBytes()));
                     icon = R.drawable.ic_baseline_sd_storage_24;
                 }
-                //Log.d("StorageManager", String.format("Volume UUID is \"%s\"", uuid.get(count).toString()));
                 total = sStatsManager.getTotalBytes(uuid.get(count));
                 used  = total - (sStatsManager.getFreeBytes(uuid.get(count)));
                 Log.d("StorageManager", String.format("Volume %d loaded.",count));
@@ -253,9 +254,8 @@ public class HomeFragment extends Fragment{
                 total = 0;
                 used  = 0;
             }
-
             // リストに情報を格納
-            dataSet.add(new FilinguaDatabase.DiskInfoDataSet(volumes.get(count).getDescription(getContext()), total/GB, used/GB, volumes.get(count).isPrimary(), volumes.get(count).isRemovable(),icon));
+            dataSet.add(new FilinguaDatabase.DiskInfoDataSet(MainActivity.filesDir, volumes.get(count).getDescription(getContext()), total/GB, used/GB, volumes.get(count).isPrimary(), volumes.get(count).isRemovable(),icon));
         }
 
         Log.d("StorageManager", String.format("Volume information has been successfully updated."));

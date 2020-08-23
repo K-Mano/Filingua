@@ -9,29 +9,26 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class FilinguaDatabase {
-    private class FileInfo{
-        FileInfo(String path, int size){
-            this.path = new File(path);
-            this.size = size;
-        }
-        File path;
-        int size;
-    }
 
-    private class Directory{
-        Directory(String path, int size, ArrayList<FileInfo> list){
-            this.path = path;
-            this.size = size;
-            fileList = list;
+    public static class Tab{
+        Tab(String name, Path path, int layout, boolean isRemovable){
+            this.name   = name;
+            this.path   = path;
+            this.layout = layout;
+            this.isRemovable = isRemovable;
         }
-        String path;
-        int size;
-        ArrayList<FileInfo> fileList;
-    }
+        private boolean isRemovable;
+        private String name;
+        private Path path;
+        private int layout;
 
-    public FileInfo setFileInfo(String filepath, int filesize){
-        FileInfo info = new FileInfo(filepath, filesize);
-        return info;
+        public String getName() {
+            return name;
+        }
+
+        public boolean isRemovable() {
+            return isRemovable;
+        }
     }
 
     // データセット(デフォルト)
@@ -46,10 +43,11 @@ public class FilinguaDatabase {
     }
 
     static class DiskInfoDataSet extends DefaultDataSet{
-        DiskInfoDataSet(String name, float max, float used, boolean isPrimary, boolean isRemovable, int icon){
+        DiskInfoDataSet(File path, String name, float max, float used, boolean isPrimary, boolean isRemovable, int icon){
             //デフォルトコンストラクタ
             super(name);
 
+            this.path = path;
             this.max   = max;
             this.used  = used;
 
@@ -60,9 +58,9 @@ public class FilinguaDatabase {
 
             this.icon = icon;
         }
-
+        private String name;
         // ドライブのパス
-        private Directory path;
+        private File path;
         // ストレージ容量
         private float max;
         // ストレージ使用量
@@ -75,6 +73,10 @@ public class FilinguaDatabase {
         private boolean isRemovable;
         // アイコン
         private int icon;
+
+        public File getPath() {
+            return path;
+        }
 
         public float getMax() {
             return max;
