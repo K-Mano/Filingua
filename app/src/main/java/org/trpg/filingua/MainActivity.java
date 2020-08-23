@@ -141,11 +141,12 @@ public class MainActivity extends AppCompatActivity {
             Log.d("FileStreaming", "Settings File is exist.");
         }
 
-        if(savedInstanceState==null){
+        if(savedInstanceState == null){
             fTrans = getSupportFragmentManager().beginTransaction();
+
+            getTabs().add(new FilinguaDatabase.Tab("Home", null, R.layout.home_view, false));
             home_frag = new HomeFragment();
             fTrans.replace(R.id.container, HomeFragment.newInstance(0));
-            getTabs().add(new FilinguaDatabase.Tab("Home", null, R.layout.home_view, false));
             fTrans.commit();
         }
 
@@ -195,6 +196,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setDisplayItems(String viewTitle, String viewSubTitle, Color background, Color toolbarBackground){
+
+    }
+
+    public void createNewWindow(){
 
     }
 
