@@ -1,29 +1,36 @@
 package org.trpg.filingua;
 
-import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ListAdapter;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 
+
 public class PinnedTabFragment extends Fragment {
-    private RecyclerAdapter sAdapter;
+    List<FilinguaDatabase.DefaultDataSet> cardList;
+    public RecyclerAdapter sAdapter;
+
+    //RecyclerView recyclerView;
+
+
 
     public RecyclerAdapter getsAdapter() {
         return sAdapter;
@@ -33,11 +40,16 @@ public class PinnedTabFragment extends Fragment {
         this.sAdapter = sAdapter;
     }
 
+    int swipedPos = -1;
     public PinnedTabFragment(){}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         int hoge=5;
+
         View view = inflater.inflate(R.layout.pinned_tab, container, false);
+
+        cardList=createObject(hoge);
 
         RecyclerView tabview      = view.findViewById(R.id.listview1);
         LinearLayoutManager tManager = new LinearLayoutManager(getActivity());
@@ -45,9 +57,10 @@ public class PinnedTabFragment extends Fragment {
         tabview.setLayoutManager(tManager);
 
         tabview.setHasFixedSize(true);
-        sAdapter  = new RecyclerAdapter(createObject(hoge),R.layout.pin_card);
+        sAdapter  = new RecyclerAdapter(cardList,R.layout.pin_card);
         tabview.setAdapter(sAdapter);
         swipeToDismissTouchHelper.attachToRecyclerView(tabview);
+
 
 
         return view;
@@ -60,25 +73,95 @@ public class PinnedTabFragment extends Fragment {
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
                 return false;
             }
 
             @Override
             public void onSwiped( RecyclerView.ViewHolder viewHolder, int direction) {
 
-                    List<FilinguaDatabase.DefaultDataSet> cardList = new ArrayList<>();
+
+
+
                     cardList.remove(viewHolder.getAdapterPosition());
                     sAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
+
             }
+            public static final float ALPHA_FULL = 1.0f;
 
             @Override
-            public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
+            public void onChildDraw(Canvas c, RecyclerView recyclerView,
                                         RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                         int actionState, boolean isCurrentlyActive) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    // Get RecyclerView item from the ViewHolder
+                    View itemView = viewHolder.itemView;
+                  //  ApplicationManager lManager = new ApplicationManager(getActivity());
+
+
+                    Paint p = new Paint();
+                    Bitmap icon;
+                    Resources r = getResources();
+                    if (dX > 0) {
+                        /* Set your color for positive displacement */
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+                      //  icon = BitmapFactory.decodeFile(R.drawable.anim_home_pin,options);
+
+
+                        p.setARGB(255, 255, 0, 0);
+
+
+                        // Draw Rect with varying right side, equal to displacement dX
+                        c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
+                                (float) itemView.getBottom(), p);
+
+                        // Set the image icon for Right swipe
+               /*       c.drawBitmap(icon,
+                                (float) itemView.getLeft() + convertDpToPx(16),
+                                (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight())/2,
+                                p);*/
+                    } else {
+
+
+                        icon = BitmapFactory.decodeResource(
+                                r, R.drawable.anim_home_pin);
+
+                        /* Set your color for negative displacement */
+                        p.setARGB(255, 0, 255, 0);
+
+                        // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
+                        c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                                (float) itemView.getRight(), (float) itemView.getBottom(), p);
+
+                        //Set the image icon for Left swipe
+                   /*     c.drawBitmap(icon,
+                                (float) itemView.getRight() - convertDpToPx(16) - icon.getWidth(),
+                                (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight())/2,
+                                p);*/
+                    }
+                    // Fade outっぽいやつ
+                    final float alpha = ALPHA_FULL - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
+                    viewHolder.itemView.setAlpha(alpha);
+                    viewHolder.itemView.setTranslationX(dX);
+
+                } else {
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
             }
 
+
+
+
+
+
+
         });
+
+
+
 
 
 
@@ -88,6 +171,12 @@ public class PinnedTabFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
     }
+    private int convertDpToPx(int dp){
+        return Math.round(dp * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+
+
 
     private List<FilinguaDatabase.DefaultDataSet> createObject(int amount){
         List<FilinguaDatabase.DefaultDataSet> DefaltDataSetList = new ArrayList<>();
@@ -102,4 +191,3 @@ public class PinnedTabFragment extends Fragment {
 
 
 }
-
