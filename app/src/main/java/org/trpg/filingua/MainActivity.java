@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         filesDir = getFilesDir();
         String test = "This is a test!";
 
-        /*
         for(int i=0; i<5; i++){
             try {
                 FileOutputStream fos = openFileOutput(String.format("file_%d.txt",i+1), Context.MODE_PRIVATE);
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-         */
+
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
         }
