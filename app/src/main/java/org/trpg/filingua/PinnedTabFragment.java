@@ -88,9 +88,13 @@ public class PinnedTabFragment extends Fragment {
 
 
 
+
                     cardList.remove(viewHolder.getAdapterPosition());
                     sAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
+                    List<FilinguaDatabase.DefaultDataSet> cardList = new ArrayList<>();
+                    cardList.remove(viewHolder.getAdapterPosition());
+                    sAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
             }
             public static final float ALPHA_FULL = 1.0f;
@@ -201,6 +205,7 @@ public class PinnedTabFragment extends Fragment {
         }
         return DefaltDataSetList;
     }
+
     public static Bitmap drawableToBitmap(Drawable drawable, int height, int width, int centerX, int centerY, int color){
 
         if(drawable instanceof BitmapDrawable){
@@ -219,6 +224,7 @@ public class PinnedTabFragment extends Fragment {
 
         return bitmap;
     }
+
 
 
 
