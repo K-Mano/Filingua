@@ -4,7 +4,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -101,14 +106,16 @@ public class PinnedTabFragment extends Fragment {
 
 
                     Paint p = new Paint();
-                    Bitmap icon;
+                    Drawable icon;
+                    Bitmap icons;
                     Resources r = getResources();
+                    icon= getResources().getDrawable(R.drawable.anim_home_pin);
                     if (dX > 0) {
                         /* Set your color for positive displacement */
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
-                      //  icon = BitmapFactory.decodeFile(R.drawable.anim_home_pin,options);
+
 
 
                         p.setARGB(255, 255, 0, 0);
@@ -119,15 +126,14 @@ public class PinnedTabFragment extends Fragment {
                                 (float) itemView.getBottom(), p);
 
                         // Set the image icon for Right swipe
-               /*       c.drawBitmap(icon,
-                                (float) itemView.getLeft() + convertDpToPx(16),
-                                (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight())/2,
-                                p);*/
+                        icons=drawableToBitmap(icon,96,96,itemView.getLeft()+(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
+                        c.drawBitmap(icons,
+                                new Matrix(),
+                                p);
                     } else {
 
 
-                        icon = BitmapFactory.decodeResource(
-                                r, R.drawable.anim_home_pin);
+                  //      icons = drawableToBitmap(icon);
 
                         /* Set your color for negative displacement */
                         p.setARGB(255, 0, 255, 0);
@@ -137,10 +143,10 @@ public class PinnedTabFragment extends Fragment {
                                 (float) itemView.getRight(), (float) itemView.getBottom(), p);
 
                         //Set the image icon for Left swipe
-                   /*     c.drawBitmap(icon,
-                                (float) itemView.getRight() - convertDpToPx(16) - icon.getWidth(),
-                                (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight())/2,
-                                p);*/
+                        icons=drawableToBitmap(icon,96,96,itemView.getRight()-(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
+                        c.drawBitmap(icons,
+                                new Matrix(),
+                                p);
                     }
                     // Fade outっぽいやつ
                     final float alpha = ALPHA_FULL - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
@@ -186,6 +192,24 @@ public class PinnedTabFragment extends Fragment {
             DefaltDataSetList.add(object);
         }
         return DefaltDataSetList;
+    }
+    public static Bitmap drawableToBitmap(Drawable drawable, int height, int width, int centerX, int centerY, int color){
+
+        if(drawable instanceof BitmapDrawable){
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        int left = centerX-(width/2);
+        int top = centerY-(height/2);
+
+        Bitmap bitmap = Bitmap.createBitmap(2000, 2000, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
+        drawable.setBounds(left, top, left+width, top+height);
+        drawable.setColorFilter(color, mode);
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
 
