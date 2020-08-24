@@ -118,6 +118,10 @@ public class PinnedTabFragment extends Fragment {
 
 
 
+
+
+
+
                         p.setARGB(255, 255, 0, 0);
 
 
@@ -126,9 +130,11 @@ public class PinnedTabFragment extends Fragment {
                                 (float) itemView.getBottom(), p);
 
                         // Set the image icon for Right swipe
+
                         icons=drawableToBitmap(icon,96,96,itemView.getLeft()+(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
                         c.drawBitmap(icons,
                                 new Matrix(),
+
                                 p);
                     } else {
 
@@ -143,9 +149,11 @@ public class PinnedTabFragment extends Fragment {
                                 (float) itemView.getRight(), (float) itemView.getBottom(), p);
 
                         //Set the image icon for Left swipe
+
                         icons=drawableToBitmap(icon,96,96,itemView.getRight()-(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
                         c.drawBitmap(icons,
                                 new Matrix(),
+
                                 p);
                     }
                     // Fade outっぽいやつ
