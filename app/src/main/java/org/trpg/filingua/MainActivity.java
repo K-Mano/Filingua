@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.provider.ContactsContract;
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i=0; i<3; i++){
             try{
-                File f = new File(filesDir, String.format("directory_%d",i+1));
+                File f = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), String.format("directory_%d",i+1));
                 if(!f.exists()){
                     f.mkdir();
                 }
@@ -198,8 +199,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void createNewWindow(){
+    public void createNewWindow(int layout, File path){
 
+    }
+
+    public static boolean newFile(File file){
+        try{
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public static boolean newDir(File dir){
+        try{
+            dir.mkdir();
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     // XML書き出し

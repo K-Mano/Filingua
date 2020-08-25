@@ -90,7 +90,6 @@ public class WindowFragment extends Fragment {
         dirItems.setAdapter(iAdapter);
         return rootView;
     }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
