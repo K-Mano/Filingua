@@ -13,4 +13,6 @@
     <string name="closeall">Close All Tabs</string>
     <string name="todayhint">Today\'s Hint</string>
     <string name="recent">Recent Activities</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ValueAnimator;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.Manifest;
@@ -26,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.provider.ContactsContract;
 import android.transition.Fade;
 import android.util.Log;
 import android.util.Xml;
@@ -53,19 +55,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
 
+    public static File filesDir;
+
     // ストレージ情報
     private static StorageStatsManager sStatsManager;
     private static StorageManager sManager;
     private static List<StorageVolume> sVolumes;
-    public static List<StorageVolume> getAllVolumes() {
-        return sVolumes;
-    }
+
     public static StorageStatsManager getStorageStatsManager() {
         return sStatsManager;
     }
@@ -73,16 +76,23 @@ public class MainActivity extends AppCompatActivity {
         return sManager;
     }
 
-    File settings;
+    private File settings;
 
     private boolean viewSwitch = false;
-    FloatingActionButton fab;
+    private FloatingActionButton fab;
+
+    private boolean tab = false;
 
     // Fragmentを作成
     HomeFragment home_frag;
     PinnedTabFragment pin_frag;
+
     // フラグメントのコントローラ
-    FragmentTransaction fTrans = getSupportFragmentManager().beginTransaction();
+    FragmentTransaction fTrans;
+
+    // Tabのリスト
+    private static List<FilinguaDatabase.Tab> tabs = new ArrayList<>();
+    public static  List<FilinguaDatabase.Tab> getTabs() { return tabs; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +101,32 @@ public class MainActivity extends AppCompatActivity {
 
         context = MainActivity.this.getApplicationContext();
         settings = new File(context.getFilesDir(), "settings.xml");
+
+        filesDir = getFilesDir();
+        String test = "This is a test!";
+
+        for(int i=0; i<5; i++){
+            try {
+                FileOutputStream fos = openFileOutput(String.format("file_%d.txt",i+1), Context.MODE_PRIVATE);
+                fos.write(test.getBytes());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        for(int i=0; i<3; i++){
+            try{
+                File f = new File(filesDir, String.format("directory_%d",i+1));
+                if(!f.exists()){
+                    f.mkdir();
+                }
+            }catch(Exception e){
+
+            }
+        }
 
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
@@ -104,10 +140,12 @@ public class MainActivity extends AppCompatActivity {
             Log.d("FileStreaming", "Settings File is exist.");
         }
 
-        if(savedInstanceState==null){
+        if(savedInstanceState == null){
+            fTrans = getSupportFragmentManager().beginTransaction();
+
+            getTabs().add(new FilinguaDatabase.Tab("Home", null, R.layout.home_view, false));
             home_frag = new HomeFragment();
-            pin_frag = new PinnedTabFragment();
-            fTrans.replace(R.id.container, home_frag);
+            fTrans.replace(R.id.container, HomeFragment.newInstance(0));
             fTrans.commit();
         }
 
@@ -119,32 +157,24 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item){
             int id = item.getItemId();
             switch (id){
-                case R.id.searchButton:
-                    break;
                 case R.id.tabButton:
-                    LayoutInflater inflator = getLayoutInflater();
-                    // Viewにアニメーションを設定
-                    //View view = inflator.inflate(R.layout.tablist_view, null, false);
-                    // アニメーションを開始
-                    //view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in));
-                    // Viewを移動
-                    //setContentView(view);
+                    fTrans = getSupportFragmentManager().beginTransaction();
+                    if(tab==false) {
+                        tab=true;
+                        fTrans.replace(R.id.container, new TabsView(getTabs()));
+                    }else{
+                        tab=false;
+                        fTrans.replace(R.id.container, new HomeFragment());
+                    }
+                    fTrans.commit();
                     break;
                 case R.id.settingsButton:
             }
             return true;
             }
         });
-
         // FAB
         fab = findViewById(R.id.home_pin_switch);
-
-        // ViewPagerに設定するAdapterをセットアップ
-        //TabAdapter tAdapter = new TabAdapter(getSupportFragmentManager());
-        // ViewPagerを宣言
-        //ViewPager viewPager = findViewById(R.id.pager);
-        // Adapterを設定
-        //viewPager.setAdapter(tAdapter);
 
         // SAFの取得
         sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
@@ -157,6 +187,19 @@ public class MainActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //doMySearch(query);
         }
+    }
+
+    // 画面の設定
+    public void setDisplayItems(DisplayMode mode){
+
+    }
+
+    public void setDisplayItems(String viewTitle, String viewSubTitle, Color background, Color toolbarBackground){
+
+    }
+
+    public void createNewWindow(){
+
     }
 
     // XML書き出し

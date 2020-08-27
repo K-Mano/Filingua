@@ -1,12 +1,12 @@
 package org.trpg.filingua;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +19,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,18 +39,30 @@ public class HomeFragment extends Fragment{
 
     //データセット
     private List<FilinguaDatabase.DiskInfoDataSet> driveInfo;
+    private List<FilinguaDatabase.DefaultDataSet> raList;
 
     // アダプター
     private RecyclerAdapter rAdapter;
     private RecyclerAdapter aAdapter;
     private DiskInfoAdapter dAdapter;
 
+    // パラメータ
+    private static final String ARG_COUNT = "count";
+
+    private String tCount;
+    private int cnt;
+
     private TextView date;
 
     private SwipeRefreshLayout srl;
 
-    // ディレクトリのリスト
-    List<FilinguaDatabase.DefaultDataSet> raList;
+    public static HomeFragment newInstance(int count) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_COUNT, count);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
@@ -78,7 +94,7 @@ public class HomeFragment extends Fragment{
         driveListView.setHasFixedSize(true);
 
         //Dividerの設定
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration divider = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
         recentView.addItemDecoration(divider);
 
         // スワイプ機能
@@ -98,16 +114,42 @@ public class HomeFragment extends Fragment{
         aAdapter = new RecyclerAdapter(raList, R.layout.ra_card);
         dAdapter = new DiskInfoAdapter(driveInfo);
 
+        // RecyclerViewのitemへのonClickListener紐づけ
+        dAdapter.setOnItemClickListener(new DiskInfoAdapter.onItemClickListener() {
+            @Override
+            public void onClick(View view, int pos) {
+                FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+                //fTrans.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                fTrans.addToBackStack(null);
+                MainActivity.getTabs().add(new FilinguaDatabase.Tab(driveInfo.get(pos).getName(), null, R.layout.fragment_window, false));
+                fTrans.replace(R.id.container, WindowFragment.newInstance(cnt, String.valueOf(driveInfo.get(pos).getPath())));
+                fTrans.commit();
+                //Toast.makeText(context, String.valueOf(driveInfo.get(pos).getName()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Adapterを設定
         quickView.setAdapter(rAdapter);
         recentView.setAdapter(aAdapter);
         driveListView.setAdapter(dAdapter);
 
         // 日付表示
-        date = (TextView)rootView.findViewById(R.id.dateView);
+        date = rootView.findViewById(R.id.dateView);
         date.setText(DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_ALL));
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        Bundle args = getArguments();
+
+        if(args != null){
+            int count = args.getInt("count");
+            String str = "HomeFragment: "+ count;
+            cnt = count + 1;
+        }
     }
 
     protected void reload(){
@@ -123,7 +165,7 @@ public class HomeFragment extends Fragment{
 
     @Override
     public void onDetach(){
-        context=null;
+        context = null;
         super.onDetach();
     }
 
@@ -152,11 +194,6 @@ public class HomeFragment extends Fragment{
             }, 1000);
         }
     };
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
-        super.onViewCreated(view, savedInstanceState);
-    }
 
     private List<FilinguaDatabase.DefaultDataSet> createObject(int amount){
         List<FilinguaDatabase.DefaultDataSet> dataSet = new ArrayList<>();
@@ -204,11 +241,9 @@ public class HomeFragment extends Fragment{
                 }else{
                     Log.d("StorageManager", String.format("Volume %d is removable storage.", count));
                     String uid_h = volumes.get(count).getUuid().replace("-","");
-                    Log.d("StorageManager", String.format("Volume %d UUID is %s", count, uid_h));
                     uuid.add(UUID.nameUUIDFromBytes(uid_h.getBytes()));
                     icon = R.drawable.ic_baseline_sd_storage_24;
                 }
-                //Log.d("StorageManager", String.format("Volume UUID is \"%s\"", uuid.get(count).toString()));
                 total = sStatsManager.getTotalBytes(uuid.get(count));
                 used  = total - (sStatsManager.getFreeBytes(uuid.get(count)));
                 Log.d("StorageManager", String.format("Volume %d loaded.",count));
@@ -219,9 +254,8 @@ public class HomeFragment extends Fragment{
                 total = 0;
                 used  = 0;
             }
-
             // リストに情報を格納
-            dataSet.add(new FilinguaDatabase.DiskInfoDataSet(volumes.get(count).getDescription(getContext()), total/GB, used/GB, volumes.get(count).isPrimary(), volumes.get(count).isRemovable(),icon));
+            dataSet.add(new FilinguaDatabase.DiskInfoDataSet(MainActivity.filesDir, volumes.get(count).getDescription(getContext()), total/GB, used/GB, volumes.get(count).isPrimary(), volumes.get(count).isRemovable(),icon));
         }
 
         Log.d("StorageManager", String.format("Volume information has been successfully updated."));

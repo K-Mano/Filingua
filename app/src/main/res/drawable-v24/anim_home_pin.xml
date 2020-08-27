@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="512dp"
+            android:height="512dp"
+            android:viewportWidth="512"
+            android:viewportHeight="512">
+            <path
+                android:name="path"
+                android:pathData="M 188.852 183.848 C 153.705 148.701 96.72 148.701 61.573 183.848 L 328.152 450.427 C 363.299 415.28 363.299 358.295 328.152 323.148 C 328.152 323.148 188.852 183.848 188.852 183.848 Z"
+                android:fillColor="#FF000000"/>
+            <path
+                android:name="path_1"
+                android:pathData="M 319.667 95.46 L 214.171 166.74 L 345.259 297.829 L 416.54 192.333 Z"
+                android:fillColor="#FF000000"/>
+            <path
+                android:name="path_2"
+                android:pathData="M 351.487 0 C 328.056 23.431 328.056 61.421 351.487 84.853 L 427.147 160.513 C 450.578 183.944 488.568 183.944 512 160.513 Z"
+                android:fillColor="#FF000000"/>
+            <path
+                android:name="path_3"
+                android:pathData="M -0.041 490.741 L 162.978 327.722 L 184.188 348.932 L 21.169 511.951 Z"
+                android:fillColor="#FF000000"/>
+            <path
+                android:name="path_4"
+                android:pathData="M 213.333 426.667 L 213.333 298.667 L 298.667 298.667 L 298.667 426.667 L 405.333 426.667 L 405.333 256 L 469.333 256 L 256 64 L 42.667 256 L 106.667 256 L 106.667 426.667 Z"
+                android:fillColor="#000000"
+                android:fillAlpha="0"/>
+        </vector>
+    </aapt:attr>
+    <target android:name="path_3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="150"
+                android:valueFrom="1"
+                android:valueTo="0"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path_2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="150"
+                android:valueFrom="1"
+                android:valueTo="0"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path_1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="150"
+                android:valueFrom="1"
+                android:valueTo="0"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="150"
+                android:valueFrom="1"
+                android:valueTo="0"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path_4">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:startOffset="150"
+                android:duration="150"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+        </aapt:attr>
+    </target>
+</animated-vector>
