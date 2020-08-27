@@ -1,5 +1,6 @@
 package org.trpg.filingua;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -7,6 +8,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ValueAnimator;
@@ -63,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Context context;
 
-    public static File filesDir;
-
     // ストレージ情報
     private static StorageStatsManager sStatsManager;
     private static StorageManager sManager;
@@ -85,38 +86,37 @@ public class MainActivity extends AppCompatActivity {
     private boolean tab = false;
 
     // Fragmentを作成
-    HomeFragment home_frag;
-    PinnedTabFragment pin_frag;
+    private HomeFragment home_frag;
+    private PinnedTabFragment pin_frag;
 
     // フラグメントのコントローラ
-    FragmentTransaction fTrans;
+    private FragmentTransaction fTrans;
 
     // Tabのリスト
     private static List<FilinguaDatabase.Tab> tabs = new ArrayList<>();
     public static  List<FilinguaDatabase.Tab> getTabs() { return tabs; }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         context = MainActivity.this.getApplicationContext();
         settings = new File(context.getFilesDir(), "settings.xml");
 
-        filesDir = getFilesDir();
         String test = "This is a test!";
 
+        /*
         for(int i=0; i<5; i++){
             try {
                 FileOutputStream fos = openFileOutput(String.format("file_%d.txt",i+1), Context.MODE_PRIVATE);
                 fos.write(test.getBytes());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
+            } catch (IOException e){
                 e.printStackTrace();
             }
         }
-
 
         for(int i=0; i<3; i++){
             try{
@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+        */
 
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
@@ -174,8 +175,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
             }
         });
-        // FAB
-        fab = findViewById(R.id.home_pin_switch);
 
         // SAFの取得
         sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);

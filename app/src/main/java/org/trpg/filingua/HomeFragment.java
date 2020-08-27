@@ -148,7 +148,6 @@ public class HomeFragment extends Fragment{
             @Override
             public void onClick(View view, int pos) {
                 FragmentTransaction fTrans = getFragmentManager().beginTransaction();
-                //fTrans.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 fTrans.addToBackStack(null);
                 MainActivity.getTabs().add(new FilinguaDatabase.Tab(driveInfo.get(pos).getName(), null, R.layout.fragment_window, false));
                 fTrans.replace(R.id.container, WindowFragment.newInstance(cnt, String.valueOf(driveInfo.get(pos).getPath())));
@@ -224,6 +223,7 @@ public class HomeFragment extends Fragment{
                 View itemView = viewHolder.itemView;
                 Bitmap icon;
 
+                // 左にスワイプ
                 if (dX > 0) {
                     // 背景色を設定
                     swipe_background.setARGB(255, 255, 150, 50);
@@ -237,7 +237,9 @@ public class HomeFragment extends Fragment{
                     }else{
                         icon = drawableToBitmap(ICON_FLAG,96,96,itemView.getLeft()+(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2, Color.WHITE);
                     }
-                } else {
+                }
+                // 右にスワイプ
+                else {
                     // 背景色を設定
                     swipe_background.setARGB(255, 200, 200, 205);
 
@@ -293,7 +295,7 @@ public class HomeFragment extends Fragment{
     }
 
     // 接続されているドライブを取得してリストに格納
-    private List<FilinguaDatabase.DiskInfoDataSet> getVolumeInfo() {
+    private List<FilinguaDatabase.DiskInfoDataSet> getVolumeInfo(){
         StorageStatsManager sStatsManager = MainActivity.getStorageStatsManager();
         StorageManager sManager = MainActivity.getsManager();
 
