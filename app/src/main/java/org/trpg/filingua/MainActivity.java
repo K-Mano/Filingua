@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         String test = "This is a test!";
 
-        /*
+
         for(int i=0; i<5; i++){
             try {
                 FileOutputStream fos = openFileOutput(String.format("file_%d.txt",i+1), Context.MODE_PRIVATE);
@@ -117,8 +117,19 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e){
                 e.printStackTrace();
             }
-        }*/
+        }
+        File s = new File(getFilesDir().getPath(), "directory_");
+        s.mkdir();
+        for(int i=0; i<3; i++){
+            try{
+                File f = new File(String.format(getFilesDir().getPath(), String.format("directory_%d",i+1));
+                if(!f.exists()){
+                    f.mkdir();
+                }
+            }catch(Exception e){
 
+            }
+        }
         for(int i=0; i<3; i++){
             try{
                 File f = new File(String.format("%s/directory_",getFilesDir()), String.format("directory_%d",i+1));
@@ -155,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
         // Appbarの子Toolbarにメニューを設定
         Toolbar mainToolbar = findViewById(R.id.main_toolbar);
         //setSupportActionBar(mainToolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().sethomeButtonEnabled(true);
         // Toolbarのメニュー項目のClickイベントリスナー
         mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
             @Override

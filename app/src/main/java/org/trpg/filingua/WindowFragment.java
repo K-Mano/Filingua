@@ -179,10 +179,10 @@ public class WindowFragment extends Fragment {
         public void onSwiped( RecyclerView.ViewHolder viewHolder, int direction) {
             if(direction == ItemTouchHelper.LEFT){
                 items.remove(viewHolder.getAdapterPosition());
-                bAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                iAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
             }
             else if(direction == ItemTouchHelper.RIGHT){
-                bAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                iAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
             }
         }
 
