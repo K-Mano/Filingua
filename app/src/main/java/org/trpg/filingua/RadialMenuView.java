@@ -186,22 +186,5 @@ public class RadialMenuView extends LinearLayout {
         }
         return false;
     }
-    public static Bitmap drawableToBitmap(Drawable drawable, int height, int width, int centerX, int centerY, int color){
 
-        if(drawable instanceof BitmapDrawable){
-            return ((BitmapDrawable)drawable).getBitmap();
-        }
-
-        int left = centerX-(width/2);
-        int top = centerY-(height/2);
-
-        Bitmap bitmap = Bitmap.createBitmap(2000, 2000, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
-        drawable.setBounds(left, top, left+width, top+height);
-        drawable.setColorFilter(color, mode);
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
 }

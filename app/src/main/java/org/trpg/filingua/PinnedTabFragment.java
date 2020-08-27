@@ -74,50 +74,46 @@ public class PinnedTabFragment extends Fragment {
 
 
 
-        ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
 
-                return false;
-            }
+            return false;
+        }
 
-            @Override
-            public void onSwiped( RecyclerView.ViewHolder viewHolder, int direction) {
-
-
+        @Override
+        public void onSwiped( RecyclerView.ViewHolder viewHolder, int direction) {
 
 
 
-                    cardList.remove(viewHolder.getAdapterPosition());
-                    sAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
-                    List<FilinguaDatabase.DefaultDataSet> cardList = new ArrayList<>();
-                    cardList.remove(viewHolder.getAdapterPosition());
-                    sAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-
-            }
-            public static final float ALPHA_FULL = 1.0f;
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView,
-                                        RecyclerView.ViewHolder viewHolder, float dX, float dY,
-                                        int actionState, boolean isCurrentlyActive) {
-                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    // Get RecyclerView item from the ViewHolder
-                    View itemView = viewHolder.itemView;
-                  //  ApplicationManager lManager = new ApplicationManager(getActivity());
+            cardList.remove(viewHolder.getAdapterPosition());
+            sAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
 
-                    Paint p = new Paint();
-                    Drawable icon;
-                    Bitmap icons;
-                    Resources r = getResources();
-                    icon= getResources().getDrawable(R.drawable.anim_home_pin);
-                    if (dX > 0) {
-                        /* Set your color for positive displacement */
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        }
+        public static final float ALPHA_FULL = 1.0f;
+
+        @Override
+        public void onChildDraw(Canvas c, RecyclerView recyclerView,
+                                RecyclerView.ViewHolder viewHolder, float dX, float dY,
+                                int actionState, boolean isCurrentlyActive) {
+            if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                // Get RecyclerView item from the ViewHolder
+                View itemView = viewHolder.itemView;
+                //  ApplicationManager lManager = new ApplicationManager(getActivity());
+
+
+                Paint p = new Paint();
+                Drawable icon;
+                Bitmap icons;
+                Resources r = getResources();
+                icon= getResources().getDrawable(R.drawable.anim_home_pin);
+                if (dX > 0) {
+                    /* Set your color for positive displacement */
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
 
 
@@ -126,49 +122,49 @@ public class PinnedTabFragment extends Fragment {
 
 
 
-                        p.setARGB(255, 255, 0, 0);
+                    p.setARGB(255, 255, 0, 0);
 
 
-                        // Draw Rect with varying right side, equal to displacement dX
-                        c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
-                                (float) itemView.getBottom(), p);
+                    // Draw Rect with varying right side, equal to displacement dX
+                    c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
+                            (float) itemView.getBottom(), p);
 
-                        // Set the image icon for Right swipe
+                    // Set the image icon for Right swipe
 
-                        icons=drawableToBitmap(icon,96,96,itemView.getLeft()+(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
-                        c.drawBitmap(icons,
-                                new Matrix(),
+                    icons=drawableToBitmap(icon,96,96,itemView.getLeft()+(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
+                    c.drawBitmap(icons,
+                            new Matrix(),
 
-                                p);
-                    } else {
-
-
-                  //      icons = drawableToBitmap(icon);
-
-                        /* Set your color for negative displacement */
-                        p.setARGB(255, 0, 255, 0);
-
-                        // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
-                        c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
-                                (float) itemView.getRight(), (float) itemView.getBottom(), p);
-
-                        //Set the image icon for Left swipe
-
-                        icons=drawableToBitmap(icon,96,96,itemView.getRight()-(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
-                        c.drawBitmap(icons,
-                                new Matrix(),
-
-                                p);
-                    }
-                    // Fade outっぽいやつ
-                    final float alpha = ALPHA_FULL - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
-                    viewHolder.itemView.setAlpha(alpha);
-                    viewHolder.itemView.setTranslationX(dX);
-
+                            p);
                 } else {
-                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+
+                    //      icons = drawableToBitmap(icon);
+
+                    /* Set your color for negative displacement */
+                    p.setARGB(255, 0, 255, 0);
+
+                    // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
+                    c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                            (float) itemView.getRight(), (float) itemView.getBottom(), p);
+
+                    //Set the image icon for Left swipe
+
+                    icons=drawableToBitmap(icon,96,96,itemView.getRight()-(itemView.getBottom()-itemView.getTop())/2, (itemView.getTop()+itemView.getBottom())/2,Color.WHITE);
+                    c.drawBitmap(icons,
+                            new Matrix(),
+
+                            p);
                 }
+                // Fade outっぽいやつ
+                final float alpha = ALPHA_FULL - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
+                viewHolder.itemView.setAlpha(alpha);
+                viewHolder.itemView.setTranslationX(dX);
+
+            } else {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
+        }
 
 
 
@@ -176,7 +172,7 @@ public class PinnedTabFragment extends Fragment {
 
 
 
-        });
+    });
 
 
 
@@ -205,7 +201,6 @@ public class PinnedTabFragment extends Fragment {
         }
         return DefaltDataSetList;
     }
-
     public static Bitmap drawableToBitmap(Drawable drawable, int height, int width, int centerX, int centerY, int color){
 
         if(drawable instanceof BitmapDrawable){
@@ -224,7 +219,6 @@ public class PinnedTabFragment extends Fragment {
 
         return bitmap;
     }
-
 
 
 
