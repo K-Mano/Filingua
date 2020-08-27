@@ -1,5 +1,6 @@
 package org.trpg.filingua;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -7,6 +8,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ValueAnimator;
@@ -25,6 +28,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.provider.SearchRecentSuggestions;
@@ -63,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Context context;
 
-    public static File filesDir;
-
     // ストレージ情報
     private static StorageStatsManager sStatsManager;
     private static StorageManager sManager;
@@ -85,42 +87,41 @@ public class MainActivity extends AppCompatActivity {
     private boolean tab = false;
 
     // Fragmentを作成
-    HomeFragment home_frag;
-    PinnedTabFragment pin_frag;
+    private HomeFragment home_frag;
+    private PinnedTabFragment pin_frag;
 
     // フラグメントのコントローラ
-    FragmentTransaction fTrans;
+    private FragmentTransaction fTrans;
 
     // Tabのリスト
     private static List<FilinguaDatabase.Tab> tabs = new ArrayList<>();
     public static  List<FilinguaDatabase.Tab> getTabs() { return tabs; }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         context = MainActivity.this.getApplicationContext();
         settings = new File(context.getFilesDir(), "settings.xml");
 
-        filesDir = getFilesDir();
         String test = "This is a test!";
 
+        /*
         for(int i=0; i<5; i++){
             try {
                 FileOutputStream fos = openFileOutput(String.format("file_%d.txt",i+1), Context.MODE_PRIVATE);
                 fos.write(test.getBytes());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
+            } catch (IOException e){
                 e.printStackTrace();
             }
-        }
-
+        }*/
 
         for(int i=0; i<3; i++){
             try{
-                File f = new File(filesDir, String.format("directory_%d",i+1));
+                File f = new File(String.format("%s/directory_",getFilesDir()), String.format("directory_%d",i+1));
                 if(!f.exists()){
                     f.mkdir();
                 }
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+
 
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
@@ -152,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Appbarの子Toolbarにメニューを設定
         Toolbar mainToolbar = findViewById(R.id.main_toolbar);
+        //setSupportActionBar(mainToolbar);
         // Toolbarのメニュー項目のClickイベントリスナー
         mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
             @Override
@@ -174,8 +177,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
             }
         });
-        // FAB
-        fab = findViewById(R.id.home_pin_switch);
 
         // SAFの取得
         sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
@@ -211,8 +212,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void createNewWindow(){
+    public static boolean newFile(File file){
+        try{
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
 
+    public static boolean newDir(File dir){
+        try{
+            dir.mkdir();
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     // XML書き出し

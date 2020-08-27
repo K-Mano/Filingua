@@ -59,7 +59,7 @@ public class RadialMenuView extends LinearLayout {
         return null;
     }
 
-    Drawable drawable= getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
+    Drawable drawable = getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
 
     @Override
     protected void onDraw(Canvas canvas){
@@ -186,5 +186,4 @@ public class RadialMenuView extends LinearLayout {
         }
         return false;
     }
-
 }
