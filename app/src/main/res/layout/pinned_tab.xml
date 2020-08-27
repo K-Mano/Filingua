@@ -19,6 +19,7 @@
             android:id="@+id/listview1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#FAF9F9"
             tools:listitem="@layout/pin_card">
 
             android:id="@+id/listview1"
