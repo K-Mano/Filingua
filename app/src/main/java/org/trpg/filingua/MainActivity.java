@@ -116,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e){
                 e.printStackTrace();
             }
-        }
+        }*/
 
         for(int i=0; i<3; i++){
             try{
-                File f = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), String.format("directory_%d",i+1));
+                File f = new File(String.format("%s/directory_",getFilesDir()), String.format("directory_%d",i+1));
                 if(!f.exists()){
                     f.mkdir();
                 }
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-        */
+
 
         if(Build.VERSION.SDK_INT>=23){
             checkPermission();
@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Appbarの子Toolbarにメニューを設定
         Toolbar mainToolbar = findViewById(R.id.main_toolbar);
+        //setSupportActionBar(mainToolbar);
         // Toolbarのメニュー項目のClickイベントリスナー
         mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
             @Override
@@ -195,10 +196,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setDisplayItems(String viewTitle, String viewSubTitle, Color background, Color toolbarBackground){
-
-    }
-
-    public void createNewWindow(int layout, File path){
 
     }
 

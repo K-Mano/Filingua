@@ -1,5 +1,6 @@
 package org.trpg.filingua;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -40,6 +41,9 @@ public class HomeFragment extends Fragment{
 
     // コンテキスト
     private Context context;
+
+    // Toolbar
+    private Toolbar toolbar;
 
     // RecyclerView
     private RecyclerView quickView;
@@ -89,6 +93,10 @@ public class HomeFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         // Viewを取得
         View rootView = inflater.inflate(R.layout.home_view, container, false);
+
+        // Toolbarを取得
+        toolbar = rootView.findViewById(R.id.main_toolbar);
+        //toolbar.setTitle("Home");
 
         // Resourcesを取得
         r = getResources();
