@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="スイッチによる設定">
+
+        <SwitchPreferenceCompat
+            app:key="switch1"
+            app:title="内部ファイルをプライベート化"
+            app:defaultValue="false"/>
+
+        <SwitchPreferenceCompat
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="true"
+            app:key="switch2"
+            app:title="ダークモード有効化"
+            app:defaultValue="false"/>
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="switch3"
+            app:title="隠しファイルの非表示" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="タップによる操作">
+
+        <ListPreference
+            app:key="crick"
+            app:title="閲覧履歴の削除" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

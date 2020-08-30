@@ -55,13 +55,6 @@ public class RadialMenuView extends LinearLayout  {
     Drawable drawable = getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
     Button btn = (Button) findViewById(R.id.button3);
 
-
-
-
-
-
-
-
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
@@ -230,9 +223,8 @@ public class RadialMenuView extends LinearLayout  {
 
         return false;
     }
+
     public void menuToggle(){
         flag=!(flag);
     }
-
-
 }
