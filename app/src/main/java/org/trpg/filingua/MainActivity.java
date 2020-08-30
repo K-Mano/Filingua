@@ -30,6 +30,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.provider.SearchRecentSuggestions;
+import android.provider.ContactsContract;
 import android.transition.Fade;
 import android.util.Log;
 import android.util.Xml;
@@ -336,12 +338,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        //インテントを取得し、アクションを確認してクエリを取得します
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //doMySearch(query);
-        }
     }
 
     ItemTouchHelper swipeTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
