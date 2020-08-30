@@ -14,4 +14,6 @@
     <string name="closeall">すべてのタブを閉じる</string>
     <string name="todayhint">今日のヒント</string>
     <string name="recent">最近のアクティビティ</string>
+    <string name="file">ファイル</string>
+    <string name="directory">ディレクトリ</string>
 </resources>

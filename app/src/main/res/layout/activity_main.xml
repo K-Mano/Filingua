@@ -32,21 +32,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="noScroll|enterAlways"
-            app:menu="@menu/menu_main"></androidx.appcompat.widget.Toolbar>
+            app:menu="@menu/menu_main"
+            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/home_pin_switch"
+        android:id="@+id/global_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="48dp"
         android:clickable="true"
-        android:onClick="switchPinHomeClicked"
+        android:onClick="global_Fab_Click"
         android:tint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_security_pin" />
+    <include layout="@layout/bottom_sheet" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
