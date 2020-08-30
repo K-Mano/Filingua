@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -29,19 +30,14 @@ import java.util.List;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
 import static com.google.android.material.color.MaterialColors.ALPHA_FULL;
 import static org.trpg.filingua.FilinguaDatabase.drawableToBitmap;
+import static org.trpg.filingua.MainActivity.setMode;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WindowFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WindowFragment extends Fragment {
 
     private Context context;
     // パラメータ
     private static final String ARG_COUNT = "count";
 
-    private String tCount;
     private int cnt;
 
     private String currentPath;
@@ -58,11 +54,12 @@ public class WindowFragment extends Fragment {
     private Drawable ICON_REMOVE;
     private Drawable ICON_FLAG;
 
+    private Toolbar toolbar;
+
     public WindowFragment(String path) {
         currentPath = path;
     }
 
-    // TODO: Rename and change types and number of parameters
     public static WindowFragment newInstance(int count, String path) {
         WindowFragment fragment = new WindowFragment(path);
         Bundle args = new Bundle();
@@ -80,7 +77,15 @@ public class WindowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_window, container, false);
 
+        // コンテキストの取得
         context = rootView.getContext();
+
+        // DisplayModeの設定
+        setMode(DisplayMode.MODE_N_COMMANDS);
+
+        // リセット
+        items.clear();
+        paths.clear();
 
         try{
             File[] fileArray = new File(currentPath).listFiles();
@@ -98,6 +103,10 @@ public class WindowFragment extends Fragment {
         }
 
         r = getResources();
+
+        // Toolbarの取得
+        toolbar = rootView.findViewById(R.id.main_toolbar);
+        //toolbar.setTitle(new File(currentPath).getName());
 
         // iconの取得
         ICON_REMOVE = r.getDrawable(R.drawable.ic_baseline_delete_24);
@@ -121,27 +130,40 @@ public class WindowFragment extends Fragment {
         addressBar.setHasFixedSize(true);
 
         // Separatorの追加
-        DividerItemDecoration divider = new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.HORIZONTAL);
-        divider.setDrawable(r.getDrawable(R.drawable.ic_separator));
-        addressBar.addItemDecoration(divider);
+        DividerItemDecoration separator = new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.HORIZONTAL);
+        separator.setDrawable(r.getDrawable(R.drawable.ic_separator));
+        addressBar.addItemDecoration(separator);
+
+        //Dividerの設定
+        DividerItemDecoration divider = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        dirItems.addItemDecoration(divider);
 
         // スワイプ機能
         swipeTouchHelper.attachToRecyclerView(dirItems);
 
         // Adapterを作成
-        iAdapter = new DirItemsAdapter(items);
+        iAdapter = new DirItemsAdapter(items, false);
         bAdapter = new AddressBarAdapter(paths);
 
-        // RecyclerViewのitemへのonClickListener紐づけ
+        /* RecyclerViewのitemへのonClickListener紐づけ */
+        // クリック
         iAdapter.setOnItemClickListener(new DirItemsAdapter.onItemClickListener() {
             @Override
             public void onClick(View view, int pos) {
                 if(new File(items.get(pos).getPath()).isDirectory()){
                     FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+                    Log.d("PathManager", items.get(pos).getPath());
                     fTrans.replace(R.id.container,WindowFragment.newInstance(0, items.get(pos).getPath()));
                     fTrans.addToBackStack(null);
                     fTrans.commit();
                 }
+            }
+        });
+        // 長押し
+        iAdapter.setOnItemLongClickListener(new DirItemsAdapter.onItemLongClickListener() {
+            @Override
+            public void onLongClick(View view, int pos) {
+
             }
         });
 
@@ -165,7 +187,6 @@ public class WindowFragment extends Fragment {
 
         if(args != null){
             int count = args.getInt("count");
-            String str = "HomeFragment: "+ count;
             cnt = count + 1;
         }
     }
@@ -175,6 +196,7 @@ public class WindowFragment extends Fragment {
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target){
             return false;
         }
+
         @Override
         public void onSwiped( RecyclerView.ViewHolder viewHolder, int direction) {
             if(direction == ItemTouchHelper.LEFT){
@@ -189,10 +211,12 @@ public class WindowFragment extends Fragment {
         @Override
         public void onChildDraw(Canvas base, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                // Get RecyclerView item from the ViewHolder
+                // RecyclerViewのアイテムをViewHolderから取得
                 View itemView = viewHolder.itemView;
 
+                // スワイプ中の背景
                 Paint swipe_background = new Paint();
+                // アイコン
                 Bitmap icon;
 
                 // 左にスワイプ

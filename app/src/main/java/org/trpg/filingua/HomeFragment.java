@@ -30,12 +30,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.trpg.filingua.FilinguaDatabase.drawableToBitmap;
+import static org.trpg.filingua.MainActivity.setMode;
 
 public class HomeFragment extends Fragment{
 
@@ -94,9 +97,11 @@ public class HomeFragment extends Fragment{
         // Viewを取得
         View rootView = inflater.inflate(R.layout.home_view, container, false);
 
+        // DisplayModeの設定
+        setMode(DisplayMode.MODE_HOME);
+
         // Toolbarを取得
         toolbar = rootView.findViewById(R.id.main_toolbar);
-        //toolbar.setTitle("Home");
 
         // Resourcesを取得
         r = getResources();
@@ -160,7 +165,6 @@ public class HomeFragment extends Fragment{
                 MainActivity.getTabs().add(new FilinguaDatabase.Tab(driveInfo.get(pos).getName(), null, R.layout.fragment_window, false));
                 fTrans.replace(R.id.container, WindowFragment.newInstance(cnt, String.valueOf(driveInfo.get(pos).getPath())));
                 fTrans.commit();
-                //Toast.makeText(context, String.valueOf(driveInfo.get(pos).getName()), Toast.LENGTH_SHORT).show();
             }
         });
 

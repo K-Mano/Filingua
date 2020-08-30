@@ -48,10 +48,6 @@ public class RadialMenuView extends LinearLayout  {
     private float mPosX = 0;
     private float mPosY = 0;
 
-    public RadialMenuResult Show(int posX, int posY) {
-        return null;
-    }
-
     Drawable drawable = getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
     Button btn = (Button) findViewById(R.id.button3);
 
@@ -197,8 +193,6 @@ public class RadialMenuView extends LinearLayout  {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if(flag){
@@ -216,14 +210,9 @@ public class RadialMenuView extends LinearLayout  {
                 posY = 0;
                 menuToggle();
                 return true;
-
-
-
         }
-
         return false;
     }
-
     public void menuToggle(){
         flag=!(flag);
     }
