@@ -109,20 +109,21 @@ public class PinnedTabFragment extends Fragment {
                 Drawable icon;
                 Bitmap icons;
                 Resources r = getResources();
-                icon= getResources().getDrawable(R.drawable.anim_home_pin);
+
                 if (dX > 0) {
                     /* Set your color for positive displacement */
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
 
+                    icon= getResources().getDrawable(R.drawable.ic_flag);
 
 
 
 
 
 
-                    p.setARGB(255, 255, 0, 0);
+                    p.setARGB(255, 255, 51, 51);
 
 
                     // Draw Rect with varying right side, equal to displacement dX
@@ -138,11 +139,11 @@ public class PinnedTabFragment extends Fragment {
                             p);
                 } else {
 
-
+                    icon= getResources().getDrawable(R.drawable.ic_folda);
                     //      icons = drawableToBitmap(icon);
 
                     /* Set your color for negative displacement */
-                    p.setARGB(255, 0, 255, 0);
+                    p.setARGB(255, 255, 153, 51);
 
                     // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
                     c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),

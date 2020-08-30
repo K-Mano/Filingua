@@ -38,6 +38,13 @@ import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -70,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public static StorageStatsManager getStorageStatsManager() {
         return sStatsManager;
     }
+
     public static StorageManager getsManager() {
         return sManager;
     }
@@ -99,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
     private PinnedTabFragment pin_frag;
 
     // フラグメントのコントローラ
+    FragmentTransaction fTrans;
+    private RadialMenuView rmv;
+
     private FragmentTransaction fTrans;
 
     // FABのモード
@@ -122,7 +133,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Tabのリスト
     private static List<FilinguaDatabase.Tab> tabs = new ArrayList<>();
-    public static  List<FilinguaDatabase.Tab> getTabs() { return tabs; }
+
+    public static List<FilinguaDatabase.Tab> getTabs() {
+        return tabs;
+    }
 
     // リソースの取得
     private Resources r;
@@ -156,6 +170,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button btn = (Button) findViewById(R.id.button3);
+        btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick (View v){
+                rmv.menuToggle();
+            }
+
+        });
+
+        rmv = findViewById(R.id.Radial);
+
 
         // Contextの取得
         context = MainActivity.this.getApplicationContext();
@@ -174,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 /*
         for(int i=0; i<5; i++){
             try {
-                FileOutputStream fos = openFileOutput(String.format("file_%d.txt",i+1), Context.MODE_PRIVATE);
+                FileOutputStream fos = openFileOutput(String.format("file_%d.txt", i + 1), Context.MODE_PRIVATE);
                 fos.write(test.getBytes());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -191,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     f.mkdir();
                 }
             }catch(Exception e){
-
+              
             }
         }
         for(int i=0; i<3; i++){
@@ -200,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!f.exists()){
                     f.mkdir();
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
 
             }
         }*/
@@ -220,31 +246,31 @@ public class MainActivity extends AppCompatActivity {
         Toolbar mainToolbar = findViewById(R.id.main_toolbar);
 
         // Toolbarのメニュー項目のClickイベントリスナー
-        mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+        mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item){
-            int id = item.getItemId();
-            switch (id){
-                case R.id.tabButton:
-                    fTrans = getSupportFragmentManager().beginTransaction();
-                    if(tab==false) {
-                        tab=true;
-                        fTrans.replace(R.id.container, new TabsView(getTabs()));
-                    }else{
-                        tab=false;
-                        fTrans.replace(R.id.container, new HomeFragment());
-                    }
-                    fTrans.commit();
-                    break;
-                case R.id.settingsButton:
-            }
-            return true;
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.tabButton:
+                        fTrans = getSupportFragmentManager().beginTransaction();
+                        if (tab == false) {
+                            tab = true;
+                            fTrans.replace(R.id.container, new TabsView(getTabs()));
+                        } else {
+                            tab = false;
+                            fTrans.replace(R.id.container, new HomeFragment());
+                        }
+                        fTrans.commit();
+                        break;
+                    case R.id.settingsButton:
+                }
+                return true;
             }
         });
 
         // SAFの取得
-        sManager = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
-        sStatsManager = (StorageStatsManager)getSystemService(Context.STORAGE_STATS_SERVICE);
+        sManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+        sStatsManager = (StorageStatsManager) getSystemService(Context.STORAGE_STATS_SERVICE);
         sVolumes = sManager.getStorageVolumes();
 
         // BottomSheetの取得
@@ -424,7 +450,6 @@ public class MainActivity extends AppCompatActivity {
         ClearTasksDialog ctd = new ClearTasksDialog();
         ctd.show(getSupportFragmentManager(), "ClearDialog");
         //tasks.clear();
-        tAdapter.notifyDataSetChanged();
     }
 
     public static boolean newFile(File file){
@@ -445,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // XML書き出し
-    public void writeXml(File file){
+    public void writeXml(File file) {
         try {
             // ファイル出力ストリームを作る
             BufferedWriter bufferWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getName(), false)));
@@ -496,11 +521,11 @@ public class MainActivity extends AppCompatActivity {
     // permissionの確認
     public void checkPermission() {
         // 既に許可
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             //setUpWriteExternalStorage();
         }
         // 拒否
-        else{
+        else {
             requestPermission();
         }
     }
@@ -515,12 +540,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public Fragment getVisibleFragment(){
+    public Fragment getVisibleFragment() {
         FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
-        if(fragments != null){
-            for(Fragment fragment : fragments){
-                if(fragment != null && fragment.isVisible())
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible())
                     return fragment;
             }
         }

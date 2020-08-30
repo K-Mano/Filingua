@@ -1,45 +1,36 @@
 package org.trpg.filingua;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import android.graphics.PorterDuff;
-
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
-
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.MotionEvent;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
-import static android.content.Context.WINDOW_SERVICE;
+public class RadialMenuView extends LinearLayout  {
 
-public class RadialMenuView extends LinearLayout {
-    public RadialMenuView(Context context){
+    public RadialMenuView(Context context) {
         super(context);
         setWillNotDraw(false);
     }
+
     public RadialMenuView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
     }
 
-    public RadialMenuView(Context context,AttributeSet attrs,int defStyle){
-        super(context,attrs,defStyle);
+    public RadialMenuView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         setWillNotDraw(false);
     }
 
@@ -49,6 +40,8 @@ public class RadialMenuView extends LinearLayout {
 
     private boolean touch = false;
 
+    private boolean flag=false;
+
     private float posX;
     private float posY;
 
@@ -56,11 +49,12 @@ public class RadialMenuView extends LinearLayout {
     private float mPosY = 0;
 
     Drawable drawable = getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
+    Button btn = (Button) findViewById(R.id.button3);
 
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        if(touch==true){
+        if(flag==true){
             // ベース(下)
             Paint base = new Paint();
             base.setAntiAlias(true);
@@ -107,6 +101,7 @@ public class RadialMenuView extends LinearLayout {
             canvas.drawBitmap(b,new Matrix(), base);
             canvas.drawBitmap(c,new Matrix(), base);
             canvas.drawBitmap(d,new Matrix(), base);
+
 
             if(Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))<=400 && Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))>=150){
                 if(Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))>=45 && Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))<=135){
@@ -159,27 +154,66 @@ public class RadialMenuView extends LinearLayout {
 
         return bitmap;
     }
+ /*  View.OnTouchListener buttonOperatorListener = new View.OnTouchListener() {
+
+
+        public boolean onTouch(View v, MotionEvent event) {
+            Button operatorButton = (Button) v;
+            int thisID = operatorButton.getId();
+
+
+                int action = event.getAction();
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    posX = event.getX();
+                    posY = event.getY();
+                    touch = true;
+                    return true;
+
+                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    mPosX = event.getX();
+                    mPosY = event.getY();
+                    break;
+
+                } else {
+                    touch = false;
+                    mPosX = 0;
+                    mPosY = 0;
+                    posX = 0;
+                    posY = 0;
+                    return true;
+                }
+
+
+            return false;
+
+
+        }
+    };*/
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                posX = event.getX();
-                posY = event.getY();
-                touch = true;
-                return true;
+                if(flag){
+                    return true;
+
+                }
+                else{
+                    return false;
+                }
             case MotionEvent.ACTION_UP:
                 touch = false;
                 mPosX = 0;
                 mPosY = 0;
-                posX  = 0;
-                posY  = 0;
+                posX = 0;
+                posY = 0;
+                menuToggle();
                 return true;
-            case MotionEvent.ACTION_MOVE:
-                mPosX=event.getX();
-                mPosY=event.getY();
-                break;
         }
         return false;
+    }
+    public void menuToggle(){
+        flag=!(flag);
     }
 }
