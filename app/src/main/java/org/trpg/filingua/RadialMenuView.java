@@ -55,10 +55,6 @@ public class RadialMenuView extends LinearLayout {
     private float mPosX = 0;
     private float mPosY = 0;
 
-    public RadialMenuResult Show(int posX, int posY){
-        return null;
-    }
-
     Drawable drawable = getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
 
     @Override
