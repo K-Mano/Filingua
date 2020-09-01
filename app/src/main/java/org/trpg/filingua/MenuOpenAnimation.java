@@ -26,6 +26,7 @@ public class MenuOpenAnimation extends Animation {
         final float inner = innerStartPos + ((innerEndPos - innerStartPos) * interpolatedTime);
         final float outer = outerStartPos + ((outerEndPos - outerStartPos) * interpolatedTime);
         final int alpha = (int)(50*interpolatedTime);
+        final int icon = (int)(50*interpolatedTime);
 
         view.setBackgroundAlpha(alpha);
         view.setOuterRadius(outer);
@@ -33,6 +34,7 @@ public class MenuOpenAnimation extends Animation {
             @Override
             public void run() {
                 view.setInnerRadius(inner);
+                view.setIconAlpha(icon);
             }
         }, 100);
         view.requestLayout();
