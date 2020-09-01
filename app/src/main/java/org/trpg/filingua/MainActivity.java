@@ -107,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private PinnedTabFragment pin_frag;
 
     // フラグメントのコントローラ
-    FragmentTransaction fTrans;
     private RadialMenuView rmv;
-
     private FragmentTransaction fTrans;
 
     // FABのモード
@@ -170,15 +168,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btn = (Button) findViewById(R.id.button3);
-        btn.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick (View v){
-                rmv.menuToggle();
-            }
-
-        });
 
         rmv = findViewById(R.id.Radial);
 
@@ -586,8 +575,12 @@ public class MainActivity extends AppCompatActivity {
                 setMode(DisplayMode.MODE_HOME);
                 break;
             case MODE_N_COMMANDS:
+                rmv.setPosition(fab.getX()+fab.getWidth()/2, fab.getY()+fab.getHeight()/2);
+                rmv.menuToggle(RadialMenuContents.STANDARD_MONO_OPERATION);
                 break;
             case MODE_S_COMMANDS:
+                rmv.setPosition(fab.getX()+fab.getWidth()/2, fab.getY()+fab.getHeight()/2);
+                rmv.menuToggle(RadialMenuContents.STANDARD_MULTI_OPERATION);
         }
         // 変更の確定
         fTrans.commit();
