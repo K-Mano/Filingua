@@ -59,6 +59,7 @@ public class RadialMenuView extends LinearLayout  {
     private float innerR;
     private float outerR;
     private int bAlpha;
+    private int aIcon;
 
     private Bitmap copy;
     private Bitmap cut;
@@ -74,6 +75,10 @@ public class RadialMenuView extends LinearLayout  {
 
     public void setBackgroundAlpha(int bAlpha) {
         this.bAlpha = bAlpha;
+    }
+
+    public void setIconAlpha(int aIcon) {
+        this.aIcon = aIcon;
     }
 
     private Resources r;
