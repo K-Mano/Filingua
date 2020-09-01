@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private RadialMenuView rmv;
     private FragmentTransaction fTrans;
 
+
     // FABのモード
     public static DisplayMode mode = DisplayMode.MODE_HOME;
     public static void setMode(DisplayMode mode) {
@@ -167,6 +168,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
 
         rmv = findViewById(R.id.Radial);

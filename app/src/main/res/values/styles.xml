@@ -13,5 +13,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorSecondary">#FFFFFF</item>
         <item name="colorControlHighlight">#2AFFFFFF</item>
+
+    </style>
+    <style parent="AppTheme" name="SplashTheme">
+
+        <item name="android:windowBackground">@drawable/splash</item>
+
+
     </style>
 </resources>
