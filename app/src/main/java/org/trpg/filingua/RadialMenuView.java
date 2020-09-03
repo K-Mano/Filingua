@@ -1,53 +1,54 @@
 package org.trpg.filingua;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import android.graphics.PorterDuff;
-
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
-
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.view.Display;
+import android.util.Log;
 import android.view.MotionEvent;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
-import static android.content.Context.WINDOW_SERVICE;
+import static org.trpg.filingua.FilinguaDatabase.drawableToBitmap;
 
-public class RadialMenuView extends LinearLayout {
-    public RadialMenuView(Context context){
+public class RadialMenuView extends LinearLayout  {
+
+    public RadialMenuView(Context context) {
         super(context);
+        r = getResources();
         setWillNotDraw(false);
     }
+
     public RadialMenuView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        r = getResources();
         setWillNotDraw(false);
     }
 
-    public RadialMenuView(Context context,AttributeSet attrs,int defStyle){
-        super(context,attrs,defStyle);
+    public RadialMenuView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        r = getResources();
         setWillNotDraw(false);
     }
 
     // メニューの固有情報
-    private String title;
     private RadialMenuContents content;
 
-    private boolean touch = false;
+    private boolean flag=false;
+    private boolean touch=false;
+    private boolean drown=false;
 
     private float posX;
     private float posY;
@@ -55,94 +56,139 @@ public class RadialMenuView extends LinearLayout {
     private float mPosX = 0;
     private float mPosY = 0;
 
-    public RadialMenuResult Show(int posX, int posY){
-        return null;
+    private float innerR;
+    private float outerR;
+    private int bAlpha;
+    private int aIcon;
+
+    private Bitmap copy;
+    private Bitmap cut;
+    private Bitmap delete;
+
+    public void setInnerRadius(float innerR) {
+        this.innerR = innerR;
     }
 
-    Drawable drawable= getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
+    public void setOuterRadius(float outerR) {
+        this.outerR = outerR;
+    }
+
+    public void setBackgroundAlpha(int bAlpha) {
+        this.bAlpha = bAlpha;
+    }
+
+    public void setIconAlpha(int aIcon) {
+        this.aIcon = aIcon;
+    }
+
+    private Resources r;
+
+    private Drawable ICON_COPY;
+    private Drawable ICON_CUT;
+    private Drawable ICON_DELETE;
+
+    public void menuToggle(RadialMenuContents content){
+        this.content = content;
+        if(!flag){
+            flag=!(flag);
+            ICON_COPY   = r.getDrawable(R.drawable.ic_baseline_file_copy_24);
+            ICON_CUT    = r.getDrawable(R.drawable.ic_baseline_move_24);
+            ICON_DELETE = r.getDrawable(R.drawable.ic_baseline_delete_24);
+            // アニメーションの定義
+            MenuOpenAnimation animation = new MenuOpenAnimation(this, 50, 150, 50, 500);
+            // アニメーションの起動期間を設定
+            animation.setDuration(250);
+            this.startAnimation(animation);
+        }else{
+            // アニメーションの定義
+            MenuCloseAnimation animation = new MenuCloseAnimation(this, 150, 50, 500, 50);
+            // アニメーションの起動期間を設定
+            animation.setDuration(250);
+            this.startAnimation(animation);
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    flag=!(flag);
+                }
+            }, 350);
+
+        }
+        //this.content = mode;
+    }
+
+    public void setPosition(float posX, float posY){
+        this.posX = posX;
+        this.posY = posY;
+    }
 
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        if(touch==true){
+        if(flag==true){
             // ベース(下)
             Paint base = new Paint();
             base.setAntiAlias(true);
             base.setStrokeWidth(1);
-            base.setColor(Color.rgb(240,240,240));
+            base.setColor(Color.WHITE);
             base.setStyle(Paint.Style.FILL);
 
-            // ベース(上)
-            Paint innerBase = new Paint();
-            innerBase.setAntiAlias(true);
-            innerBase.setStrokeWidth(1);
-            innerBase.setColor(Color.WHITE);
-            innerBase.setStyle(Paint.Style.FILL);
+            // メニュー(SelectedLine)
+            Paint line = new Paint();
+            line.setAntiAlias(true);
+            line.setStrokeWidth(1);
+            line.setColor(Color.GRAY);
+            line.setStyle(Paint.Style.FILL);
 
-            // メニュー(SelectedOverlay)
-            Paint lay1 = new Paint();
-            lay1.setAntiAlias(true);
-            lay1.setStrokeWidth(1);
-            lay1.setColor(Color.GRAY);
-            lay1.setStyle(Paint.Style.FILL);
-
-            // メニュー(SelectedLineOverlay)
-            Paint lay2=new Paint();
-            lay2.setAntiAlias(true);
-            lay2.setStrokeWidth(1);
-            lay2.setColor(Color.argb(10,0,0,0));
-            lay2.setStyle(Paint.Style.FILL);
-
+            // メニュー(Background)
+            Paint back = new Paint();
+            back.setAntiAlias(true);
+            back.setStrokeWidth(1);
+            back.setColor(Color.argb(10,0,0,0));
+            back.setStyle(Paint.Style.FILL);
 
             // ベースを描画
-            canvas.drawColor(Color.argb(50,0,0,0));
-            canvas.drawPath(drawRing(150,450,0 ,180,posX,posY),base);
-            canvas.drawPath(drawRing(150,450,0 ,-180,posX,posY),base);
-            canvas.drawPath(drawRing(150,375,0 ,180,posX,posY),innerBase);
-            canvas.drawPath(drawRing(150,375,0 ,-180,posX,posY),innerBase);
+            canvas.drawColor(Color.argb(bAlpha,0,0,0));
+            canvas.drawPath(drawRing(innerR, outerR,0 ,180,posX,posY),base);
+            canvas.drawPath(drawRing(innerR, outerR,0 ,-180,posX,posY),base);
 
             // アイコンの描画
-            Bitmap a = drawableToBitmap(drawable,128,128, (int)posX-260, (int)posY, Color.GRAY);
-            Bitmap b = drawableToBitmap(drawable,128,128, (int)posX+260, (int)posY, Color.GRAY);
-            Bitmap c = drawableToBitmap(drawable,128,128, (int)posX, (int)posY-260, Color.GRAY);
-            Bitmap d = drawableToBitmap(drawable,128,128, (int)posX, (int)posY+260, Color.GRAY);
+            if(!drown){
+                copy   = drawableToBitmap(ICON_COPY,128,128, (int)(295*Math.cos(-97.5)+posX), (int)(295*Math.sin(-97.5)+posY), Color.GRAY);
+                cut    = drawableToBitmap(ICON_COPY,128,128, (int)(295*Math.cos(152.5)+posX), (int)(295*Math.sin(152.5)+posY), Color.GRAY);
+                delete = drawableToBitmap(ICON_DELETE,128,128, (int)(295*Math.cos(-152.5)+posX), (int)(295*Math.sin(-152.5)+posY), Color.GRAY);
+                drown = true;
+            }
 
-            canvas.drawBitmap(a,new Matrix(), base);
-            canvas.drawBitmap(b,new Matrix(), base);
-            canvas.drawBitmap(c,new Matrix(), base);
-            canvas.drawBitmap(d,new Matrix(), base);
+            switch(content){
+                case STANDARD_MONO_OPERATION:
+                    canvas.drawBitmap(copy,new Matrix(), new Paint());
+                    canvas.drawBitmap(cut,new Matrix(), new Paint());
+                    canvas.drawBitmap(delete,new Matrix(), new Paint());
+                    break;
+                case STANDARD_MULTI_OPERATION:
+                    //canvas.drawBitmap(copy,new Matrix(), base);
+                    //canvas.drawBitmap(cut,new Matrix(), base);
+                    //canvas.drawBitmap(delete,new Matrix(), base);
+            }
 
-            if(Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))<=400 && Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))>=150){
-                if(Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))>=45 && Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))<=135){
-                    canvas.drawPath(drawRing(150,375,-45 ,-135,posX,posY),lay2);
-                    canvas.drawPath(drawRing(375,395,-45 ,-135,posX,posY),lay1);
+            if(touch){
+                canvas.drawPath(drawRing(430,450,(float)Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))-30 ,(float)Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))+30,posX,posY),line);
+            }
+
+            if(Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))<=500 && Math.sqrt(Math.pow(mPosX-posX,2)+Math.pow(mPosY-posY,2))>=150){
+                if(Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))>=-120 && Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))<=-75){
+                    canvas.drawPath(drawRing(150,430,-120 ,-75,posX,posY),back);
                 }
-                else if(Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))>=-45 && Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))<=45){
-                    canvas.drawPath(drawRing(150,375,-135,-225,posX,posY),lay2);
-                    canvas.drawPath(drawRing(375,395,-135,-225,posX,posY),lay1);
+                else if(Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))>=-165 && Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))<=-120){
+                    canvas.drawPath(drawRing(150,430,-165 ,-120,posX,posY),back);
                 }
-                else if(Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))>=-135 && Math.toDegrees(Math.atan2(posY-mPosY,posX-mPosX))<=-45){
-                    canvas.drawPath(drawRing(150,375,135,45,posX,posY),lay2);
-                    canvas.drawPath(drawRing(375,395,135,45,posX,posY),lay1);
-                }
-                else{
-                    canvas.drawPath(drawRing(150,375,-45,45,posX,posY),lay2);
-                    canvas.drawPath(drawRing(375,395,-45,45,posX,posY),lay1);
+                else if(Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))>=-180 && Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))<=-165 || Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))<=180 && Math.toDegrees(Math.atan2(mPosY-posY,mPosX-posX))>=150){
+                    canvas.drawPath(drawRing(150,430,-180 ,-165,posX,posY),back);
+                    canvas.drawPath(drawRing(150,430,180 ,150,posX,posY),back);
                 }
             }
         }
         this.invalidate();
-    }
-
-    public Path drawRing(float innerR, float outerR, float startAngle, float endAngle, float posX, float posY){
-        Path path = new Path();
-
-        path.moveTo(posX+(float)(outerR*Math.cos(Math.toRadians(startAngle))),posY+(float)(outerR*Math.sin(Math.toRadians(startAngle))));
-        path.arcTo(new RectF(posX-outerR,posY-outerR,posX+outerR,posY+outerR),startAngle,endAngle-startAngle);
-        path.lineTo(posX+(float)(innerR*Math.cos(Math.toRadians(endAngle))),posY+(float)(innerR*Math.sin(Math.toRadians(endAngle))));
-        path.arcTo(new RectF(posX-innerR, posY-innerR, posX+innerR, posY+innerR), endAngle, startAngle-endAngle);
-        path.close();
-        return path;
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable, int height, int width, int centerX, int centerY, int color){
@@ -164,27 +210,42 @@ public class RadialMenuView extends LinearLayout {
         return bitmap;
     }
 
+    public Path drawRing(float innerR, float outerR, float startAngle, float endAngle, float posX, float posY){
+        Path path = new Path();
+
+        path.moveTo(posX+(float)(outerR*Math.cos(Math.toRadians(startAngle))),posY+(float)(outerR*Math.sin(Math.toRadians(startAngle))));
+        path.arcTo(new RectF(posX-outerR,posY-outerR,posX+outerR,posY+outerR),startAngle,endAngle-startAngle);
+        path.lineTo(posX+(float)(innerR*Math.cos(Math.toRadians(endAngle))),posY+(float)(innerR*Math.sin(Math.toRadians(endAngle))));
+        path.arcTo(new RectF(posX-innerR, posY-innerR, posX+innerR, posY+innerR), endAngle, startAngle-endAngle);
+        path.close();
+        return path;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                posX = event.getX();
-                posY = event.getY();
-                touch = true;
-                return true;
-            case MotionEvent.ACTION_UP:
-                touch = false;
-                mPosX = 0;
-                mPosY = 0;
-                posX  = 0;
-                posY  = 0;
-                return true;
             case MotionEvent.ACTION_MOVE:
                 mPosX=event.getX();
                 mPosY=event.getY();
-                break;
+                return true;
+            case MotionEvent.ACTION_DOWN:
+                if(flag){
+                    mPosX=event.getX();
+                    mPosY=event.getY();
+                    touch=true;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            case MotionEvent.ACTION_UP:
+                mPosX=0;
+                mPosY=0;
+                touch=false;
+                //drown=false;
+                menuToggle(content);
+                return true;
         }
         return false;
     }
-
 }

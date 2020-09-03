@@ -21,8 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Today"
-            android:textColor="#CCFFFFFF"
+            android:textColor="#BBFFFFFF"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -164,7 +165,8 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:minHeight="300dp">
 
                         <TextView
                             android:id="@+id/textView"
@@ -177,22 +179,54 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recent_activity"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="8dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView"
-                            tools:itemCount="5"
-                            tools:listitem="@layout/ra_card" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                            <TextView
+                                android:id="@+id/textView6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="最近のアクティビティはありません"
+                                android:textColor="@android:color/secondary_text_light_nodisable"
+                                android:textSize="18sp"
+                                android:visibility="invisible"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/recent_activity" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recent_activity"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:itemCount="5"
+                                tools:listitem="@layout/ra_card">
+
+                            </androidx.recyclerview.widget.RecyclerView>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/recent_activity" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </org.trpg.filingua.ColorideScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

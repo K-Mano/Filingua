@@ -13,6 +13,12 @@
     <string name="closeall">Close All Tabs</string>
     <string name="todayhint">Today\'s Hint</string>
     <string name="recent">Recent Activities</string>
+    <string name="file">File</string>
+    <string name="directory">Directory</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Preference Titles -->
+
+    <!-- Messages Preferences -->
+
+    <!-- Sync Preferences -->
 </resources>
